@@ -54,11 +54,11 @@
 \begin{frame}{Introduction}
   \begin{columns}
   \column{.5\textwidth}
-  \includegraphics[width=.8\textwidth]{bioconductor_logo_rgb.eps}
+  \includegraphics[width=.8\textwidth]{bioconductor_logo_rgb.pdf}
   \bigskip\par
   \includegraphics[width=.15\textwidth]{Rlogo.png}
   \hspace{1em}
-  \includegraphics[width=.3\textwidth]{nid61380-a1-rpci-cmyk-black.eps}
+  \includegraphics[width=.3\textwidth]{nid61380-a1-rpci-cmyk-black.pdf}
   \bigskip\par
   \href{https://bioconductor.org}{https://bioconductor.org}\par
   \href{https://support.bioconductor.org}{https://support.bioconductor.org}

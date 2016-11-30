@@ -1,0 +1,12 @@
+Package: BiocTalks
+Title: Talks about the Bioconductor Project
+Version: 0.1.2
+Authors@R: person("Martin", "Morgan",
+    email = "Martin.Morgan@RoswellPark.org",
+    role = c("aut", "cre"))
+Description: This repository contains talks about the R / Bioconductor
+    project for the statistical analysis and comprehension of
+    high-throughput genomic data.
+License: Artistic-2.0
+VignetteBuilder: knitr
+Suggests: knitr, BiocStyle

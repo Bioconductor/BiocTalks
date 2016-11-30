@@ -1,0 +1,442 @@
+%\VignetteIndexEntry{Bioconductor LaTeX Style}
+%\VignettePackage{BiocStyle}
+%\VignetteEngine{knitr::knitr}
+
+\documentclass{beamer}
+
+\usetheme{Boadilla}
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,right,rightskip=1em]{section in head/foot}%
+    \usebeamerfont{subsection in head/foot}\hspace*{2ex}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,left,leftskip=1em]{subsection in head/foot}%
+    \usebeamerfont{section in head/foot}\insertsectionhead\hspace*{2ex}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.1\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\newcommand{\software}[1]{\textsl{#1}}
+\newcommand\R{\software{R}}
+%
+\newcommand\Bioconductor{\software{Bioconductor}}
+\newcommand{\Rpackage}[1]{\textsl{#1}}
+\newcommand\Biocpkg[1]{%
+  {\href{http://bioconductor.org/packages/#1}%
+    {\Rpackage{#1}}}}
+\newcommand\CRANpkg[1]{%
+  {\href{http://cran.fhcrc.org/web/packages/#1/index.html}%
+    {\Rpackage{#1}}}}
+\newcommand{\Rcode}[1]{\texttt{#1}}
+\newcommand{\Rfunction}[1]{\Rcode{#1}}
+\newcommand{\Robject}[1]{\Rcode{#1}}
+\newcommand{\Rclass}[1]{\textit{#1}}
+
+\title{\R{} / \Bioconductor{} for 'Omics Analysis}
+\author{Martin Morgan}
+\institute[RPCI]{
+  Roswell Park Cancer Institute\\
+  Buffalo, NY, USA\\
+  \href{mailto:martin.morgan@roswellpark.org}{martin.morgan@roswellpark.org}}
+\date{31 October 2016}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\begin{frame}{Introduction}
+  \begin{columns}
+  \column{.5\textwidth}
+  \includegraphics[width=.8\textwidth]{bioconductor_logo_rgb.eps}
+  \bigskip\par
+  \includegraphics[width=.15\textwidth]{Rlogo.png}
+  \hspace{1em}
+  \includegraphics[width=.3\textwidth]{nid61380-a1-rpci-cmyk-black.eps}
+  \bigskip\par
+  \href{https://bioconductor.org}{https://bioconductor.org}\par
+  \href{https://support.bioconductor.org}{https://support.bioconductor.org}
+  \column{.5\textwidth}
+  Analysis and comprehension of high-throughput genomic data.
+  \begin{itemize}
+  \item Started 2002
+  \item 1295 packages -- developed by `us' and user-contributed.
+  \end{itemize}
+  Well-used and respected.
+  \begin{itemize}
+  \item 43k unique IP downloads / month.
+  \item 17,000 PubMedCentral citations.
+  \end{itemize}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Scope}
+  Based on the \R{} programming language.
+  \begin{itemize}
+  \item Intrinsically statistical nature of data.
+  \item Flexible analysis options for new or customized types of
+    analysis.
+  \item `Old-school' scripts for reproducibility; modern graphical
+    interfaces for easy use.
+  \end{itemize}
+  Domains of application.
+  \begin{itemize}
+  \item Sequencing: differential expression, ChIP-seq, variants,
+    gene set enrichment, \ldots
+  \item Microarrays: methylation, expression, copy number, \ldots
+  \item Flow cytometry, proteomics, \ldots
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Install, learn, use, develop}
+  \begin{columns}
+    \column{.6\textwidth}
+    \includegraphics[width=\textwidth]{install-learn-use-devel.png}
+    \column{.4\textwidth}
+    Install\footnote[frame]{\url{https://bioconductor.org}}
+    \begin{itemize}
+    \item \R{}, \software{RStudio},
+      \Bioconductor{}
+    \end{itemize}
+    Learn
+    \begin{itemize}
+    \item Courses, vignettes, workflows
+    \end{itemize}
+    Use
+    \begin{itemize}
+    \item Vignettes, manuals, support
+      site\footnote[frame]{\url{https://support.bioconductor.org}}
+    \end{itemize}
+    Develop
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{\R{}: base packages}
+<<r>>=
+x <- rnorm(1000)
+y <- x + rnorm(1000, sd=.5)
+df <- data.frame(X=x, Y=y)
+fit <- lm(Y ~ X, df)
+anova(fit)
+@ 
+\end{frame}
+
+\begin{frame}[fragile]{\R{}: contributed packages}
+  \begin{columns}
+    \column{.5\textwidth}
+<<ggplot, fig.show="hide">>=
+library(ggplot2)
+ggplot(df, aes(x=x, y=y)) +
+    geom_point() + 
+    stat_smooth(method="lm")
+@ 
+    \column{.5\textwidth}
+    \includegraphics[width=\textwidth]{figure/ggplot-1}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{\Bioconductor{}}
+  \begin{columns}
+    \column{.4\textwidth}
+    Learn \& use
+    \begin{itemize}
+    \item
+      \textbf<1,2>{biocViews}\footnote[frame]{\url{https://bioconductor.org/packages/release}}
+    \item
+      \textbf<3>{Workflows}\footnote[frame]{\url{http://bioconductor.org/help/workflows}},
+      F1000
+    \item \textbf<4>{Landing pages}\footnote[frame]{e.g.,
+      \url{https://bioconductor.org/packages/edgeR}}
+      \begin{itemize}
+      \item Description
+      \item Installation
+      \item Documentation
+      \end{itemize}
+    \item \textbf<5-7>{Vignettes}\footnote[frame]{e.g.,
+      \url{https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.pdf}}
+    \end{itemize}
+    \column{.6\textwidth}
+    \includegraphics<1>[width=.6\textwidth]{biocViews.png}
+    \includegraphics<2>[width=.9\textwidth]{ChIPSeq-views.png}
+    \includegraphics<3>[width=.9\textwidth]{Workflows.png}
+    \includegraphics<4>[width=.9\textwidth]{edgeR-landing-page.png}
+    \includegraphics<5>[width=.8\textwidth]{DESeq-vignette-1.png}
+    \includegraphics<6>[width=.8\textwidth]{DESeq-vignette-2.png}
+    \includegraphics<7>[width=.8\textwidth]{DESeq-vignette-3.png}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{\Bioconductor{}}
+  
+  Input: description of experimental design and summary of read counts
+  overlapping regions of interest.
+  %% 
+<<bioconductor, eval=FALSE>>=
+pdata <- read.table("pdata.tab")  # Plain text files
+assay <- read.table("assay.tab")
+
+library(DESeq2)
+dds <- DESeqDataSetFromMatrix(assay, pdata, ~ cell + dex)
+result(DESeq(dds))
+@ 
+%% 
+  Output: top table of differentially expressed genes, log fold
+  change, adjusted $P$-value, etc.
+
+\end{frame}
+
+\section{A typical work flow}
+
+\begin{frame}{A typical work flow: RNA-seq}
+  \begin{columns}
+    \column{.5\textwidth}
+    Research question
+    \begin{itemize}
+    \item Designed experiment
+    \item Gene-level differential expression
+    \item RNA-seq data
+    \end{itemize}
+    Data processing steps
+    \begin{itemize}
+    \item Quality assessment.
+    \item Alignment and summary to count table.
+    \item Assessment of differential expression.
+    \item Results placed in context, e.g., gene set enrichment.
+    \end{itemize}
+    \column{.5\textwidth}
+    \centering\includegraphics[width=\textwidth]{rna4.jpg}
+    \medskip\par\url{http://bio.lundberg.gu.se/courses/vt13/rnaseq.html}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Pre-processing, alignment}  
+  Pre-processing
+  \begin{itemize}
+  \item FASTQ file read quality assessment
+  \end{itemize}
+  Alignment \& summary (traditional)
+  \begin{itemize}
+  \item Full alignment to BAM files, summarizing gene or transcript
+    abundance, e.g., \software{Bowtie} / \software{tophat} /
+    \software{cufflinks}; \software{RSEM}; \Biocpkg{Rsubread}
+  \item Summarize to gene-level count tables or estimates of abundance
+  \item \emph{Counts} are important: information about statistical
+    uncertainty of estimate
+  \end{itemize}
+  Alignment \& summary (contemporary)
+  \begin{itemize}
+  \item Approximate alignment directly to count tables of transcripts
+    or genes, e.g.,
+    \software{kallisto}\footnote[frame]{\url{https://pachterlab.github.io/kallisto/}},
+    \software{salmon}\footnote[frame]{\url{http://salmon.readthedocs.io/en/latest/salmon.html}}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Differential expression}
+  \begin{itemize}
+  \item E.g., \Biocpkg{limma}, \Biocpkg{edgeR}, \Biocpkg{DESeq2}
+  \end{itemize}
+  %% 
+<<bioconductor-1, eval=FALSE>>=
+library(tximport)
+df <- read.table("pdata.tab")
+## tx2gene: see tximport vignette
+txi <- tximport(df$files, type="kallisto", tx2gene=tx2gene)
+
+library(DESeq2)
+dds <- DESeqDataSetFromMatrix(txi, samples, ~ cell + dex)
+result(DESeq(dds))
+@ 
+%% 
+  \begin{itemize}
+  \item Account for library size differences (normalization)
+  \item Apply sophisticated statistical model (negative binomial)
+  \item Moderate test statistics (helps with small sample size)
+  \item Performant, tested, correct.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Analysis \& comprehension}
+\begin{columns}
+  \column{.5\textwidth}
+  Annotation packages
+  \begin{itemize}
+  \item Packages, e.g., \software{org.*}: symbol mapping;
+    \software{BSgenome.*}: genome sequence; \software{TxDb.*}: gene
+    models
+  \item Query web services, e.g., \Biocpkg{biomaRt},
+    \Biocpkg{uniprot.ws}, \Biocpkg{KEGGREST}, \ldots
+  \item \Biocpkg{AnnotationHub}: consortium and other large-scale
+    results
+  \end{itemize}
+  Gene set \& pathway analysis
+  \begin{itemize}
+  \item \Biocpkg{limma} \Rcode{fry()}; \Biocpkg{pathview};
+    \textbf<1>{\Biocpkg{ReactomePA}}
+  \end{itemize}
+  Visualization
+  \begin{itemize}
+  \item \textbf<2>{\Biocpkg{Gviz}}, \textbf<3>{\Biocpkg{ComplexHeatmap}}, \ldots
+  \end{itemize}
+  \column{.5\textwidth}
+  \includegraphics<1>[width=\textwidth]{ReactomePA.png}
+  \includegraphics<2>[width=\textwidth]{Gviz-0.png}
+  \bigskip\par
+  \includegraphics<2>[width=\textwidth]{Gviz.png}
+  \includegraphics<3>[width=\textwidth]{ComplexHeatmap.png}
+\end{columns}
+\end{frame}
+
+\section{Exploratory 'omics}
+
+\begin{frame}{Exploratory 'omics}
+  \begin{columns}
+    \column{.5\textwidth}
+    Gene differential expression
+    \begin{itemize}
+    \item RNA-seq -- \Biocpkg{DESeq2}, \Biocpkg{edgeR},
+      \Biocpkg{limma} \Rcode{voom()}
+    \item Microarray -- \Biocpkg{limma}
+    \item Single-cell -- \Biocpkg{scde}
+    \end{itemize}
+    Gene regulation
+    \begin{itemize}
+    \item ChIP-seq -- \Biocpkg{csaw}, \Biocpkg{DiffBind}
+    \item Methylation arrays -- \Biocpkg{missMethyl}, \Biocpkg{minfi}
+    \item Gene sets and pathways -- \Biocpkg{topGO}, \Biocpkg{limma},
+      \Biocpkg{ReactomePA}
+    \end{itemize}
+    \column{.5\textwidth}
+    Variants
+    \begin{itemize}
+    \item SNPs -- \Biocpkg{VariantAnnotation}, \Biocpkg{VariantFiltering}
+    \item Copy number
+    \item Structural -- \Biocpkg{InteractionSet}
+    \end{itemize}
+    Flow cytometry
+    \begin{itemize}
+    \item \Biocpkg{flowCore} \& 41 other packages
+    \end{itemize}
+    Proteomics
+    \begin{itemize}
+    \item \Biocpkg{mzR}, \Biocpkg{xcms}, and 90 other packages
+    \end{itemize}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Key classes}
+  \begin{columns}
+    \column{.5\textwidth}
+    \textbf<1>{\Biocpkg{GenomicRanges}}
+    \begin{itemize}
+    \item Genomic coordinates to represent data (e.g., aligned reads)
+      and annotations (e.g., genes, binding sites).
+    \item \Rcode{findOverlaps()} and friends.
+    \end{itemize}
+    \textbf<2>{\Biocpkg{SummarizedExperiment}}
+    \begin{itemize}
+    \item Coordinate `assay' data with row (feature) and column (sample)
+      information.
+    \end{itemize}
+    \column{.5\textwidth}
+    \includegraphics<1>[width=\textwidth]{GRanges.pdf}
+    \includegraphics<2>[width=\textwidth]{SummarizedExperiment.pdf}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Big data}
+  \begin{columns}[t]
+    \column{.5\textwidth}
+    \Biocpkg{GenomicFiles}
+    \begin{itemize}
+    \item Management of file collections, e.g., VCF, BAM, BED.
+    \end{itemize}
+    \Biocpkg{BiocParallel}
+    \begin{itemize}
+    \item Parallel evaluation on cores, clusters, clouds.
+    \end{itemize}
+    \Biocpkg{HDF5Array}
+    \begin{itemize}
+    \item On-disk storage.
+    \item Delayed evaluation.
+    \item Incorporates into \Rcode{SummarizedExperiment}.
+    \end{itemize}
+    \column{.5\textwidth}
+    Key strategies
+    \begin{itemize}
+    \item Efficient \R{} code
+    \item Restriction to data of interest
+    \item Chunk-wise iteration through large data
+    \end{itemize}
+  \end{columns}
+\end{frame}
+
+\section{From student to developer}
+
+\begin{frame}{From student to developer}
+  A common transition
+  \begin{itemize}
+  \item Naive users become proficient while developing domain
+    expertise that they share with others in their lab or more broadly
+  \item Share via packages!
+  \end{itemize}
+  Resources
+  \begin{itemize}
+  \item Learning: course material, videos, workflows, vignettes.
+  \item Using: vignettes, help pages, support site.
+  \item Developing: Wicham's \emph{R
+    Packages}\footnote[frame]{\url{http://r-pkgs.had.co.nz/}},
+    \Bioconductor{} developer
+    resources\footnote[frame]{\url{http://bioconductor.org/developers/}},
+    bioc-devel mailing list
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Developer}
+  Really easy! 
+  \begin{itemize}
+  \item Use \CRANpkg{devtools} to \Rcode{create()} a package
+  \item Add functions to the \texttt{R} directory
+  \item Add documentation with \CRANpkg{roxygen2}
+  \item Add 'markdown' vignettes using \CRANpkg{knitr}
+  \end{itemize}
+  Best practices
+  \begin{itemize}
+  \item \Rcode{build()}, \Rcode{check()}, \Rcode{install()}
+  \item Version control -- github
+  \item Unit tests, e.g., using \CRANpkg{testthat}
+  \item `Continuous integration'
+  \end{itemize}
+\end{frame}
+
+\section{Acknowledgments}
+
+\begin{frame}{Acknowledgments}
+  Core team (current \& recent): Yubo Cheng, Valerie Obenchain, Herv\'e
+  Pag\`es, Marcel Ramos, Lori Shepherd, Dan Tenenbaum, Greg Wargula.
+  \medskip\par
+  Technical advisory board: Vincent Carey, Kasper Hansen, Wolfgang
+  Huber, Robert Gentleman, Rafael Irizzary, Levi Waldron, Michael
+  Lawrence, Sean Davis, Aedin Culhane
+  \medskip\par
+  Scientific advisory board: Simon Tavare (CRUK), Paul Flicek
+  (EMBL/EBI), Simon Urbanek (AT\&T), Vincent Carey (Brigham \&
+  Women's), Wolfgang Huber (EBI), Rafael Irizzary (Dana Farber),
+  Robert Gentleman (23andMe)
+  \medskip\par
+  Research reported in this presentation was supported by the National
+  Human Genome Research Institute and the National Cancer Institute of
+  the National Institutes of Health under award numbers U41HG004059
+  and U24CA180996. The content is solely the responsibility of the
+  authors and does not necessarily represent the official views of the
+  National Institutes of Health.
+
+\end{frame}
+
+\end{document}

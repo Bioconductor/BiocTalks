@@ -1,0 +1,11 @@
+vignettes/*R
+vignettes/*aux
+vignettes/*log
+vignettes/*nav
+vignettes/*out
+vignettes/*pdf
+vignettes/*snm
+vignettes/*tex
+vignettes/*toc
+vignettes/*vrb
+vignettes/figure

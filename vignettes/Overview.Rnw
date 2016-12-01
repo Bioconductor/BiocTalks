@@ -148,27 +148,27 @@ ggplot(df, aes(x=x, y=y)) +
     \begin{itemize}
     \item
       \textbf<1,2>{biocViews}\footnote[frame]{\url{https://bioconductor.org/packages/release}}
-    \item
-      \textbf<3>{Workflows}\footnote[frame]{\url{http://bioconductor.org/help/workflows}},
-      F1000
-    \item \textbf<4>{Landing pages}\footnote[frame]{e.g.,
+    \item \textbf<3>{Landing pages}\footnote[frame]{e.g.,
       \url{https://bioconductor.org/packages/edgeR}}
       \begin{itemize}
       \item Description
       \item Installation
       \item Documentation
       \end{itemize}
-    \item \textbf<5-7>{Vignettes}\footnote[frame]{e.g.,
+    \item \textbf<4-6>{Vignettes}\footnote[frame]{e.g.,
       \url{https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.pdf}}
+    \item
+      \textbf<7>{Workflows}\footnote[frame]{\url{http://bioconductor.org/help/workflows}},
+      F1000
     \end{itemize}
     \column{.6\textwidth}
     \includegraphics<1>[width=.6\textwidth]{biocViews.png}
     \includegraphics<2>[width=.9\textwidth]{ChIPSeq-views.png}
-    \includegraphics<3>[width=.9\textwidth]{Workflows.png}
-    \includegraphics<4>[width=.9\textwidth]{edgeR-landing-page.png}
-    \includegraphics<5>[width=.8\textwidth]{DESeq-vignette-1.png}
-    \includegraphics<6>[width=.8\textwidth]{DESeq-vignette-2.png}
-    \includegraphics<7>[width=.8\textwidth]{DESeq-vignette-3.png}
+    \includegraphics<3>[width=.9\textwidth]{edgeR-landing-page.png}
+    \includegraphics<4>[width=.8\textwidth]{DESeq-vignette-1.png}
+    \includegraphics<5>[width=.8\textwidth]{DESeq-vignette-2.png}
+    \includegraphics<6>[width=.8\textwidth]{DESeq-vignette-3.png}
+    \includegraphics<7>[width=.9\textwidth]{Workflows.png}
   \end{columns}
 \end{frame}
 
@@ -238,7 +238,9 @@ result(DESeq(dds))
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Differential expression}
+\section{Lessons learned}
+
+\begin{frame}[fragile]{Lessons! Differential expression}
   \begin{itemize}
   \item E.g., \Biocpkg{limma}, \Biocpkg{edgeR}, \Biocpkg{DESeq2}
   \end{itemize}
@@ -255,14 +257,35 @@ result(DESeq(dds))
 @ 
 %% 
   \begin{itemize}
-  \item Account for library size differences (normalization)
-  \item Apply sophisticated statistical model (negative binomial)
-  \item Moderate test statistics (helps with small sample size)
-  \item Performant, tested, correct.
+  \item Library size differences (robust normalization)
+  \item Appropriate statistical model (negative binomial)
+  \item Moderated parameter estimates (shared experiment; small sample size)
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Analysis \& comprehension}
+\begin{frame}{Lessons! Key classes}
+  \begin{columns}
+    \column{.5\textwidth}
+    \textbf<1>{\Biocpkg{GenomicRanges}}
+    \begin{itemize}
+    \item Genomic coordinates to represent data (e.g., aligned reads)
+      and annotations (e.g., genes, binding sites).
+    \item \Rcode{findOverlaps()} and friends.
+    \end{itemize}
+    \textbf<2>{\Biocpkg{SummarizedExperiment}}
+    \begin{itemize}
+    \item Coordinate `assay' data with row (feature) and column (sample)
+      information.
+    \end{itemize}
+    \column{.5\textwidth}
+    \includegraphics<1>[width=\textwidth]{GRanges.pdf}
+    \includegraphics<2>[width=\textwidth]{SummarizedExperiment.pdf}
+  \end{columns}
+\end{frame}
+
+\section{Challenges \& opportunities}
+
+\begin{frame}{Opportunity! Analysis \& comprehension}
 \begin{columns}
   \column{.5\textwidth}
   Annotation packages
@@ -293,9 +316,7 @@ result(DESeq(dds))
 \end{columns}
 \end{frame}
 
-\section{Exploratory 'omics}
-
-\begin{frame}{Exploratory 'omics}
+\begin{frame}{Challenge! Mulit-'omics}
   \begin{columns}
     \column{.5\textwidth}
     Gene differential expression
@@ -330,27 +351,7 @@ result(DESeq(dds))
   \end{columns}
 \end{frame}
 
-\begin{frame}{Key classes}
-  \begin{columns}
-    \column{.5\textwidth}
-    \textbf<1>{\Biocpkg{GenomicRanges}}
-    \begin{itemize}
-    \item Genomic coordinates to represent data (e.g., aligned reads)
-      and annotations (e.g., genes, binding sites).
-    \item \Rcode{findOverlaps()} and friends.
-    \end{itemize}
-    \textbf<2>{\Biocpkg{SummarizedExperiment}}
-    \begin{itemize}
-    \item Coordinate `assay' data with row (feature) and column (sample)
-      information.
-    \end{itemize}
-    \column{.5\textwidth}
-    \includegraphics<1>[width=\textwidth]{GRanges.pdf}
-    \includegraphics<2>[width=\textwidth]{SummarizedExperiment.pdf}
-  \end{columns}
-\end{frame}
-
-\begin{frame}{Big data}
+\begin{frame}{Challenge! Big data}
   \begin{columns}[t]
     \column{.5\textwidth}
     \Biocpkg{GenomicFiles}
@@ -377,9 +378,7 @@ result(DESeq(dds))
   \end{columns}
 \end{frame}
 
-\section{From student to developer}
-
-\begin{frame}{From student to developer}
+\begin{frame}{Opportunity! From student to developer}
   A common transition
   \begin{itemize}
   \item Naive users become proficient while developing domain
@@ -398,7 +397,7 @@ result(DESeq(dds))
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Developer}
+\begin{frame}{Opportunity! Developer}
   Really easy! 
   \begin{itemize}
   \item Use \CRANpkg{devtools} to \Rcode{create()} a package

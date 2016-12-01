@@ -21,6 +21,13 @@
   \vskip0pt%
 }
 
+\AtBeginSection[]{
+  \begin{frame}<beamer>
+    \frametitle{Outline for section \thesection}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
 \newcommand{\software}[1]{\textsl{#1}}
 \newcommand\R{\software{R}}
 %
@@ -43,13 +50,11 @@
   Roswell Park Cancer Institute\\
   Buffalo, NY, USA\\
   \href{mailto:martin.morgan@roswellpark.org}{martin.morgan@roswellpark.org}}
-\date{31 October 2016}
+\date{1 December 2016}
 
 \begin{document}
 
 \maketitle
-
-\section{Introduction}
 
 \begin{frame}{Introduction}
   \begin{columns}
@@ -76,6 +81,8 @@
   \end{columns}
 \end{frame}
 
+\section{About}
+
 \begin{frame}{Scope}
   Based on the \R{} programming language.
   \begin{itemize}
@@ -92,29 +99,6 @@
   \item Microarrays: methylation, expression, copy number, \ldots
   \item Flow cytometry, proteomics, \ldots
   \end{itemize}
-\end{frame}
-
-\begin{frame}{Install, learn, use, develop}
-  \begin{columns}
-    \column{.6\textwidth}
-    \includegraphics[width=\textwidth]{install-learn-use-devel.png}
-    \column{.4\textwidth}
-    Install\footnote[frame]{\url{https://bioconductor.org}}
-    \begin{itemize}
-    \item \R{}, \software{RStudio},
-      \Bioconductor{}
-    \end{itemize}
-    Learn
-    \begin{itemize}
-    \item Courses, vignettes, workflows
-    \end{itemize}
-    Use
-    \begin{itemize}
-    \item Vignettes, manuals, support
-      site\footnote[frame]{\url{https://support.bioconductor.org}}
-    \end{itemize}
-    Develop
-  \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{\R{}: base packages}
@@ -178,8 +162,8 @@ ggplot(df, aes(x=x, y=y)) +
   overlapping regions of interest.
   %% 
 <<bioconductor, eval=FALSE>>=
-pdata <- read.table("pdata.tab")  # Plain text files
-assay <- read.table("assay.tab")
+assay <- read.table("assay.tab")  # Plain text files
+pdata <- read.table("pdata.tab")
 
 library(DESeq2)
 dds <- DESeqDataSetFromMatrix(assay, pdata, ~ cell + dex)
@@ -191,79 +175,78 @@ result(DESeq(dds))
 
 \end{frame}
 
-\section{A typical work flow}
+\section{Use}
 
 \begin{frame}{A typical work flow: RNA-seq}
   \begin{columns}
     \column{.5\textwidth}
-    Research question
-    \begin{itemize}
-    \item Designed experiment
-    \item Gene-level differential expression
-    \item RNA-seq data
-    \end{itemize}
-    Data processing steps
-    \begin{itemize}
-    \item Quality assessment.
-    \item Alignment and summary to count table.
-    \item Assessment of differential expression.
-    \item Results placed in context, e.g., gene set enrichment.
-    \end{itemize}
+    \begin{enumerate}
+    \item Experimental design
+    \item Wet-lab
+    \item \textbf<1>{Sequencing; QC} -- FASTQ
+      \only<1-2>{
+      \item \textbf<2>{Alignment} -- BAM
+      \item \textbf<2>{Data reduction} -- count tables
+      }
+      \only<3->{
+      \item \textbf<3>{Psuedo-alignment} -- count tables
+      }
+    \item \textbf<4>{Statistical analysis}
+    \item \textbf<4>{Comprehesion}
+    \end{enumerate}
     \column{.5\textwidth}
-    \centering\includegraphics[width=\textwidth]{rna4.jpg}
-    \medskip\par\url{http://bio.lundberg.gu.se/courses/vt13/rnaseq.html}
+    \only<1>{
+      \centering\includegraphics[width=\textwidth]{rna4.jpg}
+      \medskip\par\url{http://bio.lundberg.gu.se/courses/vt13/rnaseq.html}
+    }
+    \only<3>{
+      \par\noindent
+      kallisto\footnote[frame]{https://pachterlab.github.io/kallisto/},
+      salmon\footnote[frame]{http://salmon.readthedocs.io/}, \ldots
+      \begin{itemize}
+      \item \emph{Very} fast
+      \item Very memory efficient
+      \item Good enough for many applications
+      \end{itemize}
+      \Bioconductor
+      \begin{itemize}
+      \item \Biocpkg{tximport}
+      \item \Biocpkg{limma} \texttt{voom()}
+      \end{itemize}
+    }
+    \only<4>{
+      \par\noindent
+      \includegraphics[width=.2\textwidth]{Rlogo.png}
+      \hspace{1em}
+      \includegraphics[width=.6\textwidth]{bioconductor_logo_rgb.pdf}
+      \begin{itemize}
+      \item \Biocpkg{DESeq2}, \Biocpkg{edgeR}
+      \item Gene set / pathway analysis
+      \item Annotation \& visualization
+      \end{itemize}
+    }
   \end{columns}
-\end{frame}
-
-\begin{frame}{Pre-processing, alignment}  
-  Pre-processing
-  \begin{itemize}
-  \item FASTQ file read quality assessment
-  \end{itemize}
-  Alignment \& summary (traditional)
-  \begin{itemize}
-  \item Full alignment to BAM files, summarizing gene or transcript
-    abundance, e.g., \software{Bowtie} / \software{tophat} /
-    \software{cufflinks}; \software{RSEM}; \Biocpkg{Rsubread}
-  \item Summarize to gene-level count tables or estimates of abundance
-  \item \emph{Counts} are important: information about statistical
-    uncertainty of estimate
-  \end{itemize}
-  Alignment \& summary (contemporary)
-  \begin{itemize}
-  \item Approximate alignment directly to count tables of transcripts
-    or genes, e.g.,
-    \software{kallisto}\footnote[frame]{\url{https://pachterlab.github.io/kallisto/}},
-    \software{salmon}\footnote[frame]{\url{http://salmon.readthedocs.io/en/latest/salmon.html}}
-  \end{itemize}
 \end{frame}
 
 \section{Lessons learned}
 
-\begin{frame}[fragile]{Lessons! Differential expression}
-  \begin{itemize}
-  \item E.g., \Biocpkg{limma}, \Biocpkg{edgeR}, \Biocpkg{DESeq2}
-  \end{itemize}
+\begin{frame}[fragile]{Differential expression}
+  E.g., \Biocpkg{limma}, \Biocpkg{edgeR}, \Biocpkg{DESeq2}
   %% 
 <<bioconductor-1, eval=FALSE>>=
-library(tximport)
-df <- read.table("pdata.tab")
-## tx2gene: see tximport vignette
-txi <- tximport(df$files, type="kallisto", tx2gene=tx2gene)
-
 library(DESeq2)
-dds <- DESeqDataSetFromMatrix(txi, samples, ~ cell + dex)
+dds <- DESeqDataSetFromMatrix(assay, pdata, ~ cell + dex)
 result(DESeq(dds))
 @ 
 %% 
   \begin{itemize}
   \item Library size differences (robust normalization)
   \item Appropriate statistical model (negative binomial)
-  \item Moderated parameter estimates (shared experiment; small sample size)
+  \item Moderated parameter estimates (shared design; small sample size)
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Lessons! Key classes}
+\begin{frame}{Interoperability \& reproducibility: classes}
   \begin{columns}
     \column{.5\textwidth}
     \textbf<1>{\Biocpkg{GenomicRanges}}
@@ -283,9 +266,13 @@ result(DESeq(dds))
   \end{columns}
 \end{frame}
 
-\section{Challenges \& opportunities}
+\section{Challenges}
 
-\begin{frame}{Opportunity! Analysis \& comprehension}
+\begin{frame}{Single-cell analysis}
+  
+\end{frame}
+
+\begin{frame}{Analysis \& comprehension}
 \begin{columns}
   \column{.5\textwidth}
   Annotation packages
@@ -316,8 +303,8 @@ result(DESeq(dds))
 \end{columns}
 \end{frame}
 
-\begin{frame}{Challenge! Mulit-'omics}
-  \begin{columns}
+\begin{frame}{Multi-'omic integration}
+  \begin{columns}[t]
     \column{.5\textwidth}
     Gene differential expression
     \begin{itemize}
@@ -351,8 +338,32 @@ result(DESeq(dds))
   \end{columns}
 \end{frame}
 
-\begin{frame}{Challenge! Big data}
-  \begin{columns}[t]
+\begin{frame}{Multi-'omic integration}
+  \begin{columns}
+    \column{.5\textwidth}
+    \centering\includegraphics[width=.8\textwidth]{copy_number_QC_2.pdf}
+    \column{.5\textwidth}
+    \Biocpkg{MultiAssayExperiment}
+    \begin{itemize}
+    \item Easily manage multiple assays on overlapping samples
+    \end{itemize}
+    \Biocpkg{ExperimentHub}
+    \begin{itemize}
+    \item Curated, summarized, large-scale experiment data (e.g., GEO
+      RNA-Seq; HMP, TCGA) for incorporation in local analysis
+    \end{itemize}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Big data}
+  \begin{columns}
+    \column{.5\textwidth}
+    Key strategies
+    \begin{itemize}
+    \item Efficient \R{} code
+    \item Restriction to data of interest
+    \item Chunk-wise iteration through large data
+    \end{itemize}
     \column{.5\textwidth}
     \Biocpkg{GenomicFiles}
     \begin{itemize}
@@ -368,17 +379,35 @@ result(DESeq(dds))
     \item Delayed evaluation.
     \item Incorporates into \Rcode{SummarizedExperiment}.
     \end{itemize}
-    \column{.5\textwidth}
-    Key strategies
-    \begin{itemize}
-    \item Efficient \R{} code
-    \item Restriction to data of interest
-    \item Chunk-wise iteration through large data
-    \end{itemize}
   \end{columns}
 \end{frame}
 
-\begin{frame}{Opportunity! From student to developer}
+\section{Opportunities}
+
+\begin{frame}{Install, learn, use, develop}
+  \begin{columns}
+    \column{.6\textwidth}
+    \includegraphics[width=\textwidth]{install-learn-use-devel.png}
+    \column{.4\textwidth}
+    Install\footnote[frame]{\url{https://bioconductor.org}}
+    \begin{itemize}
+    \item \R{}, \software{RStudio},
+      \Bioconductor{}
+    \end{itemize}
+    Learn
+    \begin{itemize}
+    \item Courses, vignettes, workflows
+    \end{itemize}
+    Use
+    \begin{itemize}
+    \item Vignettes, manuals, support
+      site\footnote[frame]{\url{https://support.bioconductor.org}}
+    \end{itemize}
+    Develop
+  \end{columns}
+\end{frame}
+
+\begin{frame}{From student to developer}
   A common transition
   \begin{itemize}
   \item Naive users become proficient while developing domain
@@ -397,7 +426,7 @@ result(DESeq(dds))
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Opportunity! Developer}
+\begin{frame}{Developer}
   Really easy! 
   \begin{itemize}
   \item Use \CRANpkg{devtools} to \Rcode{create()} a package
@@ -414,7 +443,7 @@ result(DESeq(dds))
   \end{itemize}
 \end{frame}
 
-\section{Acknowledgments}
+\section*{Acknowledgments}
 
 \begin{frame}{Acknowledgments}
   Core team (current \& recent): Yubo Cheng, Valerie Obenchain, Herv\'e

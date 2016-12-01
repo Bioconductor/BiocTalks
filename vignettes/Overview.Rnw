@@ -16,14 +16,13 @@
     \usebeamerfont{section in head/foot}\insertsectionhead\hspace*{2ex}
   \end{beamercolorbox}%
   \begin{beamercolorbox}[wd=.1\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
-    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
   \end{beamercolorbox}}%
   \vskip0pt%
 }
 
 \AtBeginSection[]{
   \begin{frame}<beamer>
-    \frametitle{Outline for section \thesection}
     \tableofcontents[currentsection]
   \end{frame}
 }
@@ -103,12 +102,12 @@
 
 \begin{frame}[fragile]{\R{}: base packages}
 <<r>>=
-x <- rnorm(1000)
-y <- x + rnorm(1000, sd=.5)
+x <- rnorm(100)
+y <- x + rnorm(100, sd=.5)
 df <- data.frame(X=x, Y=y)
 fit <- lm(Y ~ X, df)
 anova(fit)
-@ 
+@
 \end{frame}
 
 \begin{frame}[fragile]{\R{}: contributed packages}
@@ -117,9 +116,9 @@ anova(fit)
 <<ggplot, fig.show="hide">>=
 library(ggplot2)
 ggplot(df, aes(x=x, y=y)) +
-    geom_point() + 
+    geom_point() +
     stat_smooth(method="lm")
-@ 
+@
     \column{.5\textwidth}
     \includegraphics[width=\textwidth]{figure/ggplot-1}
   \end{columns}
@@ -143,7 +142,7 @@ ggplot(df, aes(x=x, y=y)) +
       \url{https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.pdf}}
     \item
       \textbf<7>{Workflows}\footnote[frame]{\url{http://bioconductor.org/help/workflows}},
-      F1000
+      F1000 channel
     \end{itemize}
     \column{.6\textwidth}
     \includegraphics<1>[width=.6\textwidth]{biocViews.png}
@@ -157,10 +156,10 @@ ggplot(df, aes(x=x, y=y)) +
 \end{frame}
 
 \begin{frame}[fragile]{\Bioconductor{}}
-  
+
   Input: description of experimental design and summary of read counts
   overlapping regions of interest.
-  %% 
+  %%
 <<bioconductor, eval=FALSE>>=
 assay <- read.table("assay.tab")  # Plain text files
 pdata <- read.table("pdata.tab")
@@ -168,14 +167,14 @@ pdata <- read.table("pdata.tab")
 library(DESeq2)
 dds <- DESeqDataSetFromMatrix(assay, pdata, ~ cell + dex)
 result(DESeq(dds))
-@ 
-%% 
+@
+%%
   Output: top table of differentially expressed genes, log fold
   change, adjusted $P$-value, etc.
 
 \end{frame}
 
-\section{Use}
+\section{'Omics workflows}
 
 \begin{frame}{A typical work flow: RNA-seq}
   \begin{columns}
@@ -195,7 +194,7 @@ result(DESeq(dds))
     \item \textbf<4>{Comprehesion}
     \end{enumerate}
     \column{.5\textwidth}
-    \only<1>{
+    \only<1-2>{
       \centering\includegraphics[width=\textwidth]{rna4.jpg}
       \medskip\par\url{http://bio.lundberg.gu.se/courses/vt13/rnaseq.html}
     }
@@ -231,18 +230,21 @@ result(DESeq(dds))
 \section{Lessons learned}
 
 \begin{frame}[fragile]{Differential expression}
-  E.g., \Biocpkg{limma}, \Biocpkg{edgeR}, \Biocpkg{DESeq2}
-  %% 
+  \Biocpkg{limma}, \Biocpkg{edgeR}, \Biocpkg{DESeq2}
+  %%
 <<bioconductor-1, eval=FALSE>>=
 library(DESeq2)
 dds <- DESeqDataSetFromMatrix(assay, pdata, ~ cell + dex)
 result(DESeq(dds))
-@ 
-%% 
+@
+%%
   \begin{itemize}
+  \item Batch effects (e.g., surrogate variable analysis)
   \item Library size differences (robust normalization)
   \item Appropriate statistical model (negative binomial)
-  \item Moderated parameter estimates (shared design; small sample size)
+  \item Moderated, data-driven parameter estimates (shared design;
+    small sample size)
+  \item Multiple testing (independent hypothesis weighting)
   \end{itemize}
 \end{frame}
 
@@ -286,7 +288,7 @@ result(DESeq(dds))
 \begin{frame}[fragile]{Classic, tidy, rich: RNA-seq count data}
   \begin{semiverbatim}
 df0 <- as.data.frame(list(mean=colMeans(classic[, -(1:22)])))
-df1 <- tidy %>% group_by(probeset) %>% 
+df1 <- tidy %>% group_by(probeset) %>%
     summarize(mean=mean(exprs))
 df2 <- as.data.frame(list(mean=rowMeans(assay(rich))))
 ggplot(df1, aes(mean)) + geom_density()
@@ -322,32 +324,37 @@ ggplot(df1, aes(mean)) + geom_density()
     Lessons learned / best practices
     \begin{itemize}
     \item Considerable value in semantically rich structures
-    \item Current implementations trade-off user and developer
-      convenience
     \item Endomorphism, simple vocabulary, consistent paradigm aid use
     \end{itemize}
   \end{columns}
 \end{frame}
-  
+
 \section{Challenges}
 
 \begin{frame}{Single-cell analysis}
-  
+  \begin{columns}
+    \column{.5\textwidth}
+    \includegraphics[width=\textwidth]{monocle-trajectory.png}
+    \medskip\par Trapnel et al.\footnote[frame]{\url{http://bioconductor.org/packages/monocle}}
+    \column{.5\textwidth}
+    \begin{itemize}
+    \item Large \& sparse
+      \begin{itemize}
+      \item Outlier detection
+      \item Zero-inflated models
+      \item E.g., \Biocpkg{MAST}
+      \end{itemize}
+    \item Challenging
+      \begin{itemize}
+      \item E.g., developmental trajectories
+      \end{itemize}
+    \end{itemize}
+  \end{columns}
 \end{frame}
 
-\begin{frame}{Analysis \& comprehension}
+\begin{frame}{Comprehension}
 \begin{columns}
   \column{.5\textwidth}
-  Annotation packages
-  \begin{itemize}
-  \item Packages, e.g., \software{org.*}: symbol mapping;
-    \software{BSgenome.*}: genome sequence; \software{TxDb.*}: gene
-    models
-  \item Query web services, e.g., \Biocpkg{biomaRt},
-    \Biocpkg{uniprot.ws}, \Biocpkg{KEGGREST}, \ldots
-  \item \Biocpkg{AnnotationHub}: consortium and other large-scale
-    results
-  \end{itemize}
   Gene set \& pathway analysis
   \begin{itemize}
   \item \Biocpkg{limma} \Rcode{fry()}; \Biocpkg{pathview};
@@ -357,11 +364,16 @@ ggplot(df1, aes(mean)) + geom_density()
   \begin{itemize}
   \item \textbf<2>{\Biocpkg{Gviz}}, \textbf<3>{\Biocpkg{ComplexHeatmap}}, \ldots
   \end{itemize}
+  Communication
+  \begin{itemize}
+  \item Reports; interactive apps
+  \item \textbf<4>{Statistical nuance}, especially uncertainty, multiple testing
+  \end{itemize}
   \column{.5\textwidth}
   \includegraphics<1>[width=\textwidth]{ReactomePA.png}
-  \includegraphics<2>[width=\textwidth]{Gviz-0.png}
+  \includegraphics<2>[width=.9\textwidth]{Gviz-0.png}
   \bigskip\par
-  \includegraphics<2>[width=\textwidth]{Gviz.png}
+  \includegraphics<2>[width=.9\textwidth]{Gviz.png}
   \includegraphics<3>[width=\textwidth]{ComplexHeatmap.png}
 \end{columns}
 \end{frame}
@@ -475,31 +487,12 @@ ggplot(df1, aes(mean)) + geom_density()
   \begin{itemize}
   \item Naive users become proficient while developing domain
     expertise that they share with others in their lab or more broadly
-  \item Share via packages!
-  \end{itemize}
-  Resources
-  \begin{itemize}
-  \item Learning: course material, videos, workflows, vignettes.
-  \item Using: vignettes, help pages, support site.
-  \item Developing: Wicham's \emph{R
-    Packages}\footnote[frame]{\url{http://r-pkgs.had.co.nz/}},
-    \Bioconductor{} developer
-    resources\footnote[frame]{\url{http://bioconductor.org/developers/}},
-    bioc-devel mailing list
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Developer}
-  Really easy! 
-  \begin{itemize}
-  \item Use \CRANpkg{devtools} to \Rcode{create()} a package
-  \item Add functions to the \texttt{R} directory
-  \item Add documentation with \CRANpkg{roxygen2}
-  \item Add 'markdown' vignettes using \CRANpkg{knitr}
+  \item Share via packages
+  \item Really easy!
   \end{itemize}
   Best practices
   \begin{itemize}
-  \item \Rcode{build()}, \Rcode{check()}, \Rcode{install()}
+  \item \CRANpkg{devtools} \Rcode{create()}, \Rcode{build()}, \Rcode{check()}, \Rcode{install()}
   \item Version control -- github
   \item Unit tests, e.g., using \CRANpkg{testthat}
   \item `Continuous integration'

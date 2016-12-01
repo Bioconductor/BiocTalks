@@ -266,6 +266,69 @@ result(DESeq(dds))
   \end{columns}
 \end{frame}
 
+\begin{frame}{Classic, tidy, rich: RNA-seq count data}
+  Classic
+  \begin{itemize}
+  \item Sample x (phenotype + expression) Feature \Rcode{data.frame}
+  \end{itemize}
+  Tidy
+  \begin{itemize}
+  \item 'Melt' expression values to two long columns, replicated
+    phenotype columns. End result: long data frame.
+  \end{itemize}
+  Rich, e.g., \Rcode{SummarizedExperiment}
+  \begin{itemize}
+  \item Phenotype and expression data manipulated in a coordinated
+    fashion but stored separately.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Classic, tidy, rich: RNA-seq count data}
+  \begin{semiverbatim}
+df0 <- as.data.frame(list(mean=colMeans(classic[, -(1:22)])))
+df1 <- tidy %>% group_by(probeset) %>% 
+    summarize(mean=mean(exprs))
+df2 <- as.data.frame(list(mean=rowMeans(assay(rich))))
+ggplot(df1, aes(mean)) + geom_density()
+  \end{semiverbatim}
+\end{frame}
+
+\begin{frame}{Classic, tidy, rich: RNA-seq count data}
+  \begin{columns}[t]
+    \column{.5\textwidth}
+    Vocabulary
+    \begin{itemize}
+    \item Classic: extensive
+    \item Tidy: restricted ‘endomorphisms’
+    \item Rich: extensive, ‘meaningful’
+    \end{itemize}
+    Constraints (e.g., probes \& samples)
+    \begin{itemize}
+    \item Tidy: implicit
+    \item Classic, Rich: explicit
+    \end{itemize}
+    Flexibility
+    \begin{itemize}
+    \item Classic, tidy: general-purpose
+    \item Rich: specialized
+    \end{itemize}
+
+    \column{.5\textwidth}
+    Programming contract
+    \begin{itemize}
+    \item   Classic, tidy: limited
+    \item Rich: strict
+    \end{itemize}
+    Lessons learned / best practices
+    \begin{itemize}
+    \item Considerable value in semantically rich structures
+    \item Current implementations trade-off user and developer
+      convenience
+    \item Endomorphism, simple vocabulary, consistent paradigm aid use
+    \end{itemize}
+  \end{columns}
+\end{frame}
+  
 \section{Challenges}
 
 \begin{frame}{Single-cell analysis}

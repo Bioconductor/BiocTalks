@@ -43,7 +43,7 @@
   Roswell Park Cancer Institute\\
   Buffalo, NY, USA\\
   \href{mailto:martin.morgan@roswellpark.org}{martin.morgan@roswellpark.org}}
-\date{4 November 2016}
+\date{6 December 2016}
 
 \begin{document}
 
@@ -59,13 +59,6 @@
   \includegraphics[width=.15\textwidth]{Rlogo.png}
   \hspace{1em}
   \includegraphics[width=.3\textwidth]{nid61380-a1-rpci-cmyk-black.pdf}
-  \bigskip\par
-  \includegraphics[width=!, height=2em]{logo_nhgri.png}
-  \bigskip\par
-  \includegraphics[width=.8\textwidth]{nci-logo-full.png}
-  \bigskip\par
-  \href{https://bioconductor.org}{https://bioconductor.org}\par
-  \href{https://support.bioconductor.org}{https://support.bioconductor.org}
   \column{.5\textwidth}
   Analysis and comprehension of high-throughput genomic data.
   \begin{itemize}
@@ -83,24 +76,58 @@
 \section{State of the project}
 
 \begin{frame}{State of the project}
-  \begin{itemize}
-  \item Packages
-  \item Users
-  \item Web \& support sites
-  \item Training \& meetings
-  \item Release \& devel builders
-  \item Funding
-  \item Governance: (annual) Scientific Advisory Board; (monthly)
-    Technical Advisory Board
-  \end{itemize}
+  \begin{columns}
+    \column{.5\textwidth}
+    \only<1>{
+      \includegraphics[width=\textwidth]{packages-per-release.png}
+    }
+    \only<2>{
+      \includegraphics[width=\textwidth]{web-visits.png}
+      \bigskip\par\centering
+      \includegraphics[width=.8\textwidth]{web-users-country.png}
+    }
+    \only<3>{
+      \href{https://bioconductor.org}{https://bioconductor.org}\par
+      \href{https://support.bioconductor.org}{https://support.bioconductor.org}
+    }
+    \only<4>{
+      \begin{center}
+      \includegraphics[width=!, height=2em]{logo_nhgri.png}
+      \bigskip\par
+      \includegraphics[width=.8\textwidth]{nci-logo-full.png}
+      \bigskip\par
+      \includegraphics[width=.6\textwidth]{sound_wordmark.png}
+      \end{center}
+    }
+    \column{.5\textwidth}
+    \begin{itemize}
+    \item Packages
+    \item Users
+    \item Web \& support sites
+    \item Training \& meetings
+    \item Release \& devel builders
+    \item Funding
+    \item Governance: (annual) Scientific Advisory Board; (monthly)
+      Technical Advisory Board
+    \end{itemize}
+  \end{columns}
 \end{frame}
 
 \section{Recent developments}
 
 \begin{frame}{Recent developments}
   \begin{itemize}
-  \item New package reviews
+  \item New package submission
+    \begin{itemize}
+    \item As github issues
+    \item Public; review participation welcome
+    \end{itemize}
   \item \Biocpkg{ExperimentHub} and \Biocpkg{AnnotationHub}
+    \begin{itemize}
+    \item Similar to `Annotation' and `Experiment' data repositories
+    \item \Biocpkg{ExperimentHub} often used as the 'data store' for
+      experiment data packages, e.g., \Biocpkg{alpineData}.
+    \end{itemize}
   \item Large data representation: \Biocpkg{HDF5Array}
   \item (Sneak peak) \software{Organism.dplyr}
   \end{itemize}
@@ -108,22 +135,31 @@
 
 \begin{frame}[fragile]{\Biocpkg{HDF5Array}}
   \begin{semiverbatim}
-library(HDF5Array)   # available in release & devel
-n = 10000; m = 1000; # very large size
-h5 = HDF5Array(matrix(rnorm(n * m), n))   
-h5 + h5              # 'delayed' computation
-library(SummarizedExperiment)
-SummarizedExperiment(h5) # rich context
+> library(HDF5Array)   # available in release & devel
+> library(h5vcData)
+> h5file <- system.file("extdata", "example.tally.hfs5",
+                        package="h5vcData")
+> cov0 <- HDF5Array(h5file, "/ExampleStudy/16/Coverages")
+> pcov <- t(drop(cov0[ , 1, ]))  # coverage on plus strand
+> mcov <- t(drop(cov0[ , 2, ]))  # coverage on minus strand
+
+> library(SummarizedExperiment)
+> SummarizedExperiment(list(pcov=pcov, mcov=mcov))
+class: SummarizedExperiment 
+dim: 90354753 6 
+metadata(0):
+assays(2): pcov mcov
+...
   \end{semiverbatim}
 \end{frame}
 
 \begin{frame}[fragile]{Sneak peak: \software{Organism.dplyr}}
-  \begin{semiverbatim}
+  \begin{verbatim}
 > library(Organism.dplyr) # not yet publicly available
 > src = src_ucsc("Homo sapiens")  # any org.* + TxDb.*
 using org.Hs.eg.db, TxDb.Hsapiens.UCSC.hg38.knownGene
 > src
-src:  sqlite 3.8.6 [/home/mtmorgan/organism_dplry.sqlite]
+src:  sqlite 3.8.6 [/home/mtmorgan/organism_dplyr.sqlite]
 tbls: id, id_accession, id_go, id_go_all, id_omim_pm,
   id_protein, id_transcript, ranges_cds, ranges_exon,
   ranges_gene, ranges_tx
@@ -131,7 +167,7 @@ tbls: id, id_accession, id_go, id_go_all, id_omim_pm,
     select(ensembl, symbol, genename)
 > exons(src, filter=list(symobl='BRCA1'))      # GRanges
 > exons_tbl(src, filter=list(symbol='BRCA1'))  # tibble
-  \end{semiverbatim}
+  \end{verbatim}
 \end{frame}
 
 \section{Programming best practices}
@@ -139,10 +175,15 @@ tbls: id, id_accession, id_go, id_go_all, id_omim_pm,
 \begin{frame}{Programming best practices}
   \begin{itemize}
   \item Reuse \& interoperability
-  \item Correct, robust, efficient (vectorized) code;
-    \Biocpkg{BiocParallel}
+    \begin{itemize}
+    \item \Biocpkg{GenomicRanges} and \Biocpkg{SummarizedExperiment}
+    \item \Biocpkg{rtracklayer}\Rcode{::import()} for BED, WIG, GTF,
+      GFF, etc.
+    \end{itemize}
   \item Documentation: classic or \CRANpkg{roxygen2}
   \item Testing: \CRANpkg{RUnit} or \CRANpkg{testthat}
+  \item Correct, robust, efficient (vectorized) code;
+    \Biocpkg{BiocParallel}
   \item Classic, tidy, and semantically rich data
   \end{itemize}
 \end{frame}
@@ -168,7 +209,7 @@ f1 = function(n) {
 }
     \end{verbatim}
     \column{.5\textwidth}
-    \begin{semiverbatim}
+    \begin{verbatim}
 f2 = function(n)
   vapply(1:n, c, integer(1))
 
@@ -183,9 +224,8 @@ f(0); f3(0)
 
 ## efficient
 system.time(f3(1e9)         
-    \end{semiverbatim}
+    \end{verbatim}
   \end{columns}
-
 \end{frame}
 
 \begin{frame}{Classic, tidy, rich: RNA-seq count data}
@@ -268,8 +308,8 @@ ggplot(df1, aes(mean)) + geom_density()
 \section{Acknowledgments}
 
 \begin{frame}{Acknowledgments}
-  Core team (current \& recent): Yubo Cheng, Valerie Obenchain, Herv\'e
-  Pag\`es, Marcel Ramos, Lori Shepherd, Dan Tenenbaum, Greg Wargula.
+  Core team: Yubo Cheng, Valerie Obenchain, Herv\'e Pag\`es, Marcel
+  Ramos, Lori Shepherd, Nitesh Turaga, Greg Wargula.
   \medskip\par
   Technical advisory board: Vincent Carey, Kasper Hansen, Wolfgang
   Huber, Robert Gentleman, Rafael Irizzary, Levi Waldron, Michael

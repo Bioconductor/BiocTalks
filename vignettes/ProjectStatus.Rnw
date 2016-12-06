@@ -29,13 +29,10 @@
 \newcommand\Biocpkg[1]{%
   {\href{http://bioconductor.org/packages/#1}%
     {\Rpackage{#1}}}}
-\newcommand\CRANpkg[1]{%
-  {\href{http://cran.fhcrc.org/web/packages/#1/index.html}%
+\newcommand\CRANpkg[1]{
+  {\href{http://cran.r-project.org/package=#1}%
     {\Rpackage{#1}}}}
 \newcommand{\Rcode}[1]{\texttt{#1}}
-\newcommand{\Rfunction}[1]{\Rcode{#1}}
-\newcommand{\Robject}[1]{\Rcode{#1}}
-\newcommand{\Rclass}[1]{\textit{#1}}
 
 \title{The \Bioconductor{} Project: Current Status}
 \author{Martin Morgan}
@@ -91,6 +88,11 @@
       \href{https://support.bioconductor.org}{https://support.bioconductor.org}
     }
     \only<4>{
+      \includegraphics[width=\textwidth]{build-report-overview.png}
+      \par
+      \includegraphics[width=\textwidth]{build-report-detail.png}
+    }
+    \only<5>{
       \begin{center}
       \includegraphics[width=!, height=2em]{logo_nhgri.png}
       \bigskip\par
@@ -104,7 +106,7 @@
     \item Packages
     \item Users
     \item Web \& support sites
-    \item Training \& meetings
+    \item Training, workflows, \& meetings
     \item Release \& devel builders
     \item Funding
     \item Governance: (annual) Scientific Advisory Board; (monthly)
@@ -155,16 +157,18 @@ assays(2): pcov mcov
 
 \begin{frame}[fragile]{Sneak peak: \software{Organism.dplyr}}
   \begin{verbatim}
-> library(Organism.dplyr) # not yet publicly available
+> library(Organism.dplyr)
+    ## biocLite("Biocondctor/Organism.dplyr")
 > src = src_ucsc("Homo sapiens")  # any org.* + TxDb.*
 using org.Hs.eg.db, TxDb.Hsapiens.UCSC.hg38.knownGene
 > src
 src:  sqlite 3.8.6 [/home/mtmorgan/organism_dplyr.sqlite]
 tbls: id, id_accession, id_go, id_go_all, id_omim_pm,
-  id_protein, id_transcript, ranges_cds, ranges_exon,
-  ranges_gene, ranges_tx
-> tbl(src, 'id') %>% filter(symbol == 'BRCA1') %>% 
-    select(ensembl, symbol, genename)
+    id_protein, id_transcript, ranges_cds, ranges_exon,
+    ranges_gene, ranges_tx
+> ids <- tbl(src, "id") %>% 
+    filter(symbol %in% c("PTEN", "BRCA1"))
+> left_join(ids, tbl(src, "ranges_tx")) %>% GRanges
 > exons(src, filter=list(symobl='BRCA1'))      # GRanges
 > exons_tbl(src, filter=list(symbol='BRCA1'))  # tibble
   \end{verbatim}
@@ -223,7 +227,7 @@ identical(f(100), f3(100))
 f(0); f3(0)                 
 
 ## efficient
-system.time(f3(1e9)         
+system.time(f3(1e9))
     \end{verbatim}
   \end{columns}
 \end{frame}

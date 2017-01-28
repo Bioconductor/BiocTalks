@@ -49,7 +49,7 @@
   Roswell Park Cancer Institute\\
   Buffalo, NY, USA\\
   \href{mailto:martin.morgan@roswellpark.org}{martin.morgan@roswellpark.org}}
-\date{1 December 2016}
+\date{30 January 2017}
 
 \begin{document}
 
@@ -501,9 +501,19 @@ ggplot(df1, aes(mean)) + geom_density()
 
 \section*{Acknowledgments}
 
+\begin{frame}{Core team jobs!}
+  \begin{itemize}
+  \item Scientific Programmer / Analyst -- core packages; \emph{R} and
+    \emph{C} algorithms.
+  \item Senior Programmer / Analyst -- system / cloud management.
+  \item \url{https://support.bioconductor.org/p/91548/}
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Acknowledgments}
-  Core team (current \& recent): Yubo Cheng, Valerie Obenchain, Herv\'e
-  Pag\`es, Marcel Ramos, Lori Shepherd, Dan Tenenbaum, Greg Wargula.
+  Core team (current \& recent): Yubo Cheng, Valerie Obenchain,
+  Herv\'e Pag\`es, Marcel Ramos, Lori Shepherd, Dan Tenenbaum, Nitesh
+  Turaga, Greg Wargula.
   \medskip\par
   Technical advisory board: Vincent Carey, Kasper Hansen, Wolfgang
   Huber, Robert Gentleman, Rafael Irizzary, Levi Waldron, Michael

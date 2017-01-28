@@ -86,8 +86,7 @@
   Based on the \R{} programming language.
   \begin{itemize}
   \item Intrinsically statistical nature of data.
-  \item Flexible analysis options for new or customized types of
-    analysis.
+  \item Flexiblity for new or customized types of analysis.
   \item `Old-school' scripts for reproducibility; modern graphical
     interfaces for easy use.
   \end{itemize}
@@ -95,7 +94,7 @@
   \begin{itemize}
   \item Sequencing: differential expression, ChIP-seq, variants,
     gene set enrichment, \ldots
-  \item Microarrays: methylation, expression, copy number, \ldots
+  \item Microarrays: methylation, SNP, expression, copy number, \ldots
   \item Flow cytometry, proteomics, \ldots
   \end{itemize}
 \end{frame}
@@ -191,7 +190,7 @@ result(DESeq(dds))
       \item \textbf<3>{Psuedo-alignment} -- count tables
       }
     \item \textbf<4>{Statistical analysis}
-    \item \textbf<4>{Comprehesion}
+    \item \textbf<4>{Comprehension}
     \end{enumerate}
     \column{.5\textwidth}
     \only<1-2>{
@@ -218,6 +217,7 @@ result(DESeq(dds))
       \includegraphics[width=.2\textwidth]{Rlogo.png}
       \hspace{1em}
       \includegraphics[width=.6\textwidth]{bioconductor_logo_rgb.pdf}
+      \bigskip\par
       \begin{itemize}
       \item \Biocpkg{DESeq2}, \Biocpkg{edgeR}
       \item Gene set / pathway analysis
@@ -287,10 +287,15 @@ result(DESeq(dds))
 
 \begin{frame}[fragile]{Classic, tidy, rich: RNA-seq count data}
   \begin{semiverbatim}
-df0 <- as.data.frame(list(mean=colMeans(classic[, -(1:22)])))
+## Manipulate, e.g., mean expression of each gene
+
+df0 <- data.frame(mean=colMeans(classic[, -(1:22)]))
 df1 <- tidy %>% group_by(probeset) %>%
     summarize(mean=mean(exprs))
-df2 <- as.data.frame(list(mean=rowMeans(assay(rich))))
+df2 <- data.frame(mean=rowMeans(assay(rich)))
+
+## Visualize
+
 ggplot(df1, aes(mean)) + geom_density()
   \end{semiverbatim}
 \end{frame}

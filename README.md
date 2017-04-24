@@ -11,6 +11,8 @@ interoperability, and usability. We'll explore these ideas,
 emphasizing the development best practices that you and I can adopt to
 make great software. Bring your laptops for interactive enjoyment.
 
+[Slides] avialable.
+
 Biographical sketch: [Martin Morgan][] has been active in the _R_
 community for more than 10 years. Originally trained as an
 evolutionary geneticist, Martin has lead the _Bioconductor_
@@ -19,4 +21,5 @@ data since 2009. Martin is currently at the Roswell Park Cancer
 Institute in Buffalo, New York.
 
 [Bioconductor]: https://bioconductor.org
+[Slides]: https://bioconductor.org/help/course-materials/2017/Meetup/Overview-Classic-Rich-Tidy.pdf
 [Martin Morgan]: https://www.roswellpark.edu/martin-morgan

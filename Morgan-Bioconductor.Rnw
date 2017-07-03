@@ -1,0 +1,175 @@
+% \VignetteEngine{knitr::knitr}
+% \VignetteIndexEntry{Annotation -- slides}
+
+\documentclass{beamer}
+\usepackage{BioconductorSlides}
+\title{Approaches to Package Management -- \Bioconductor}
+\author{Martin Morgan 
+  (\href{mailto:Martin.Morgan@RoswellPark.org}{Martin.Morgan@RoswellPark.org}) \\
+  Roswell Park Cancer Institute \\
+  Buffalo, NY, USA
+}
+\date{3 July, 2017}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}[fragile]
+  \begin{center}
+\begin{verbatim}
+Btw, are you coming to DSC/useR! this year? I think 
+the Bioc git(hub) approach might be viable for R itself.
+Would be great to have someone advocate that at the DSC.
+
+Michael
+\end{verbatim}
+  \end{center}
+\end{frame}
+
+\begin{frame}{\Bioconductor}
+  ``Analysis and comprehension of high-throughput genomic data''
+  \bigskip\par
+  \begin{itemize}
+  \item Established 2002; 1383 packages (core team and contributed).
+  \item Well-respected, cited (20k PubMedCentral full-text citations),
+    used (>350k unique IP addresses / year).
+  \item \url{https://bioconductor.org};
+    \url{https://support.bioconductor.org}
+  \item CRAN-style repository. Cloud front content delivery (plus a
+    few mirrors maintained for local purposes).
+  \item Primarily supported through US NIH.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Release cycle}
+  Six-month releases
+  \begin{itemize}
+  \item `Devel': new packages and features.
+  \item `Release': end-users.
+  \end{itemize}
+  Which \R? The one end-users see.
+  \begin{itemize}
+  \item Now: release and devel both on \R-3.4.
+  \item October: release on \R-3.4, devel on \R-devel.
+  \end{itemize}
+  Comments
+  \begin{itemize}
+  \item Cohesive packages -- deep dependency graph.
+  \item Enables change -- breakage in devel tolerated.
+  \item \Biocpkg{BiocInstaller}\Rfunction{::biocLite()} to manage
+    repositories seen by \Rfunction{install.packages()}.
+  \item \R-devel not always exposed to \Bioconductor{} packages.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Package management}
+  Version-controlled packages.
+  \begin{itemize}
+  \item All packages under SVN; individual developer accounts.
+  \item Versioning scheme \Rcode{x.y.z}. \Rcode{y} even in release,
+    odd in devel. Each commit bumps \Rcode{z}.
+  \item Will discuss GIT in a second\ldots
+  \end{itemize}
+  Comments
+  \begin{itemize}
+  \item Mostly package developer commits, but core team can step in.
+  \item Eases incorporation of breaking (ours, CRAN, \R{}) changes
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Nightly builds}
+  \begin{itemize}
+  \item \Rcode{R CMD build} / \Rcode{check}; 
+  \item Cross-platform; release \& devel.
+  \item SVN snapshot; all packages.
+  \item Successful builds get pushed to public repositories.
+  \end{itemize}
+  Comments
+  \begin{itemize}
+  \item `Continuous integration', sort of.
+  \item Sometimes `impossible' public repositories
+    \begin{itemize}
+    \item A introduces feature that breaks B. A pushed but old B still
+      available.
+    \item B depends on feature in newest A.  A builds and installs (so
+      used by B) but fails check (so not pushed). B builds \& checks
+      so pushed.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{New packages}
+  Submission -- open and reviewed.
+  \begin{itemize}
+  \item Maintainer posts a public Github issue.
+  \item Moderated (manual) -- is it a legitimate package?
+  \item Built and checked. Usually, maintainers iterate until `OK'.
+  \item Assigned reviewer (core team; implementation), plus community
+    input (implementation, science).
+  \item Goal: incremental improvement, rather than absolute standard.
+  \end{itemize}
+  \framebreak
+  Comments
+  \begin{itemize}
+  \item Wide range of quality.
+  \item Time consuming and sometimes uninspiring; hard to standardize
+    across reviewers.
+  \item Maybe 80\% use \Rpkg{roxygen2} (and probably \Rpkg{devtools}).
+  \item Common issues: \Bioconductor{} interoperability;
+    documentation; \R{} code.
+  \end{itemize}
+  \framebreak
+  Common issues: \R{} code
+  \begin{itemize}
+  \item Generally, iteration instead of vectorization (tell-tale sign:
+    use of parallel evaluation).
+  \item Robustness
+    \begin{itemize}
+    \item \Rcode{1:n} (vs.\ \Rcode{seqlen(n)}).
+    \item \Rcode{if (<scalar binary logical>) \{\}} (challenging!)
+    \end{itemize}
+  \item `Copy-and-append' \Rcode{x = numeric(); for (i in 1:n) x <- c(x, i)}
+  \item Vocabulary \Rcode{apply(x, 2, sum)} vs.\ \Rcode{colSums(x)}.
+  \item Hoisting constant expressions out of loops.
+  \item Cyclomatic complexity.
+  \end{itemize}
+\end{frame}
+
+\section{Software management -- SVN / GIT}
+
+\begin{frame}{Software management}
+  Currently\ldots
+  \begin{itemize}
+  \item SVN repository
+  \item git / svn `bridge' -- sync git repositories with git.
+  \item About $1/2$ commits via git / svn bridge.
+  \end{itemize}
+  Migrating to git
+  \begin{itemize}
+  \item \Rcode{git clone https://git.bioconductor.org/packages/BiocGenerics}
+  \end{itemize}
+  Challenges
+  \begin{itemize}
+  \item Cannonical location / distributed support \& social environment.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Acknowledgments}
+  \begin{itemize}
+  \item Core: Valerie Obenchain, Herv\'e Pag\`es,
+    Lori Shepherd, Marcel Ramos, Nitesh Turaga, Daniel van Twisk.
+  \item The research reported in this presentation was supported by
+    the National Cancer Institute and the National Human Genome
+    Research Institute of the National Institutes of Health under
+    Award numbers U24CA180996 and U41HG004059. The content is
+    solely the responsibility of the authors and does not necessarily
+    represent the official views of the National Institutes of Health
+    or the National Science Foundation.
+  \end{itemize}
+  \medskip\par
+  \url{https://bioconductor.org},
+  \url{https://support.bioconductor.org}
+\end{frame}
+
+\end{document}

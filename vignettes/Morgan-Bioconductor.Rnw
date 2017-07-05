@@ -15,18 +15,6 @@
 
 \maketitle
 
-\begin{frame}[fragile]
-  \begin{center}
-\begin{verbatim}
-Btw, are you coming to DSC/useR! this year? I think 
-the Bioc git(hub) approach might be viable for R itself.
-Would be great to have someone advocate that at the DSC.
-
-Michael
-\end{verbatim}
-  \end{center}
-\end{frame}
-
 \begin{frame}{\Bioconductor}
   ``Analysis and comprehension of high-throughput genomic data''
   \bigskip\par

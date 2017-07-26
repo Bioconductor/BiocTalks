@@ -1,0 +1,257 @@
+%\VignetteIndexEntry{Bioconductor LaTeX Style}
+%\VignettePackage{BiocStyle}
+%\VignetteEngine{knitr::knitr}
+
+\documentclass{beamer}
+
+\usetheme{Boadilla}
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.25ex,dp=1ex,right,rightskip=1em]{section in head/foot}%
+    \usebeamerfont{subsection in head/foot}\hspace*{2ex}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,left,leftskip=1em]{subsection in head/foot}%
+    \usebeamerfont{section in head/foot}\insertsectionhead\hspace*{2ex}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.1\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\AtBeginSection[]{
+  \begin{frame}<beamer>
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\newcommand{\software}[1]{\textsl{#1}}
+\newcommand\R{\software{R}}
+%
+\newcommand\Bioconductor{\software{Bioconductor}}
+\newcommand{\Rpackage}[1]{\textsl{#1}}
+\newcommand\Biocpkg[1]{%
+  {\href{http://bioconductor.org/packages/#1}%
+    {\Rpackage{#1}}}}
+\newcommand\CRANpkg[1]{%
+  {\href{http://cran.fhcrc.org/web/packages/#1/index.html}%
+    {\Rpackage{#1}}}}
+\newcommand{\Rcode}[1]{\texttt{#1}}
+\newcommand{\Rfunction}[1]{\Rcode{#1}}
+\newcommand{\Robject}[1]{\Rcode{#1}}
+\newcommand{\Rclass}[1]{\textit{#1}}
+
+\title{Bioc 2017: Where Software and Biology Connect}
+\author{Martin Morgan}
+\institute[RPCI]{
+  Roswell Park Cancer Institute\\
+  Buffalo, NY, USA\\
+  \href{mailto:martin.morgan@roswellpark.org}{martin.morgan@roswellpark.org}}
+\date{26 July 2017}
+
+\begin{document}
+
+\maketitle
+
+<<setup, echo=FALSE>>=
+options(width=60)
+suppressPackageStartupMessages({
+    library(Organism.dplyr)
+})
+@ 
+
+\begin{frame}{Welcome!}
+  Special thanks
+  \begin{itemize}
+  \item Erica Fieck, David Nunes, Pam Jarrett, Meeghan Becker.
+  \item Fast talkers, workshop contributors, scholarship recipients.
+  \end{itemize}
+  Conference home page
+  \begin{itemize}
+  \item \url{https://bioconductor.org/bioc2017}
+  \item Includes link to Developer Day schedule,
+    \url{https://goo.gl/8oRmsp}.
+  \end{itemize}
+  Twitter: \href{https://twitter.com/hashtag/bioc2017}{\#bioc2017}
+\end{frame}
+
+\begin{frame}{Today}
+  Informal and flexible
+  \begin{itemize}
+  \item Want to do something different? Say so!
+  \end{itemize}
+  Schedule \url{https://goo.gl/8oRmsp}
+  \begin{itemize}
+  \item Introduction / project overview / group activity
+  \item Lightning talks (two parallel sessions)
+  \item Workshops (bring your laptops!) / Birds-of-a-feather (discussion-oriented)
+  \item Panel discussion
+  \end{itemize}
+  Coffee breaks \& box lunches; no evening acivities
+  \medskip\par
+  Tommorrow: 8:30 am, Jimmy Fund Auditorium
+\end{frame}
+
+\begin{frame}{\Bioconductor{} -- introduction}
+  \begin{columns}
+    \column{.5\textwidth}
+    \emph{Statistical analysis and comprehension of high-throughput genomic data}
+    \begin{itemize}
+    \item Started 2001
+    \item 1383 software packages
+    \item $>900$ distinct maintainers
+    \end{itemize}
+    Widely used, highly respected
+    \begin{itemize}
+    \item $>20000$ PubMedCentral full-text citations
+    \end{itemize}
+    Supported
+    \begin{itemize}
+    \item \url{https://bioconductor.org}
+    \item \url{https://support.bioconductor.org}
+    \end{itemize}
+    \column{.5\textwidth}
+    \includegraphics[width=\textwidth]{download-stats-2017.png}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{\Bioconductor{} -- introduction}
+  \begin{columns}
+    \column{.5\textwidth}
+    \begin{itemize}
+    \item Federally funded through NIH (NHGRI, NCI), EU, \ldots
+    \item International relevance
+    \end{itemize}
+    Important themes
+    \begin{itemize}
+    \item Statistical programming
+    \item Leading-edge
+    \item Reproducible
+    \item Integrative
+    \item Documented
+    \end{itemize}
+    \column{.5\textwidth}
+    \includegraphics[width=\textwidth]{website-visitor-location-2017.png}
+    \par
+    \includegraphics[width=\textwidth]{website-traffic-comparison-2017.png}
+    \par
+    \centering{Web site visitors}
+  \end{columns}
+\end{frame}  
+ 
+\begin{frame}{\Bioconductor{} -- core team}
+  \begin{description}
+  \item [Valerie Obenchain] \Biocpkg{VariantAnnotation},
+    \Biocpkg{GenomicFiles}, \emph{GRanges} infrastructure; nightly
+    builds; AWS administration.
+  \item [Herv\'e Pag\`es] \emph{GRanges} infrastructure;
+    \Biocpkg{Biostrings}, \Biocpkg{DelayedArray} \& friends; nightly
+    builds.
+  \item[Marcel Ramos] \Biocpkg{MultiAssayExperiment} (with Levi
+    Waldron); \Biocpkg{SOUNDBoard}.
+  \item[Lori Shepherd] \Biocpkg{BiocFileCache}, `single package
+    builder', docker and AMI solutions.
+  \item [Nitesh Turaga] Transition to git version control.
+  \item [Daniel van Twisk] \Biocpkg{Organism.dplyr} /
+    \Biocpkg{AnnotationFilter}.
+  \end{description}
+\end{frame}
+
+\begin{frame}{\Bioconductor{} -- friends of the core team}
+  \begin{description}
+    \item[Andrzej Ol\'es] \Biocpkg{BiocStyle}, workflows, build
+      system (chef, git integration).
+    \item[Mike Smith] \Biocpkg{biomaRt}, \Biocpkg{rhdf5} / \Biocpkg{Rhdf5lib}.
+    \item[Lukas Shiffer] Support site markdown!
+  \end{description}
+\end{frame}
+
+\begin{frame}[fragile]{\Biocpkg{Organism.dplyr} (Yubo Cheng, Daniel van Twisk) -- motivation}
+  \begin{itemize}
+  \item \emph{TxDb.*}, \emph{org.*} annotation package integration not
+    entirely satisfying.
+  \item Databases underly these resources, why not expose in a
+    `modern' (i.e., \CRANpkg{dplyr}) way?
+  \end{itemize}
+<<Organism.dplyr>>=
+library(Organism.dplyr)
+src_organism("TxDb.Hsapiens.UCSC.hg38.knownGene")
+@ 
+\begin{itemize}
+\item See \Biocpkg{Organism.dplyr} and \Biocpkg{AnnotationFilter}
+  vignettes for details.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\Biocpkg{Organism.dplyr} -- insights}
+  Exposing sql tables is really helpful.
+  \begin{itemize}
+  \item Easy to see and manipulate data.
+  \end{itemize}
+  A pure \CRANpkg{dplyr} approach is too low-level
+  \begin{itemize}
+  \item Common queries require complicated joins.
+  \item Useful `verbs' like \Rcode{select()}, \Rcode{mapIds()} are and
+    extended on top of \CRANpkg{dplyr}.
+  \item Classes like \Rclass{GRanges} are incredibly useful, even if
+    superficial similarity to a \Rcode{tibble}.
+  \end{itemize}
+  \emph{Ici c'est ne pas une pipe}
+  \begin{itemize}
+  \item \Rcode{tbl(src, "ranges\_tx") \%>\% makeGRangesFromDataFrame()}
+  \item Endomorphisms, consistency, and restricted vocabulary really
+    help users.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\href{https://github.com/mtmorgan/TENxGenomics}{\emph{TENxGenomics}} (github only)}
+  \begin{itemize}
+  \item E.g., single-cell RNA-seq, 30,000 genes by 1.3 million samples.
+  \item On-disk representation in hdf5.
+  \item Convenient in-memory 'matrix' abstraction for subsetting,
+    etc.; easy input of manageable subset.
+  \item \url{https://github.com/mtmorgan/TENxGenomics}
+  \end{itemize}
+\begin{verbatim}
+> basename(fl)
+[1] "1M_neurons_filtered_gene_bc_matrices_h5.h5"
+> (tenx <- TENxGenomics(fl))
+class: TENxGenomics 
+h5path: ./1M_neurons_filtered_gene_bc_matrices_h5.h5 
+dim(): 27998 x 1306127 
+> tenk <- tenx[, sample(ncol(tenx), 10000)] ## fast
+> m <- as.matrix(tenk)                      ## manageable
+> se = SummarizedExperiment(list(tenx))     ## rich
+\end{verbatim}
+\end{frame}
+
+\begin{frame}{Slack}
+  \centering{\includegraphics[width=.8\textwidth]{slack.png}}
+  \medskip\par Want to join? Look for an invitation on the bioc-devel
+  mailing list next week.
+\end{frame}
+
+\section*{Acknowledgments}
+
+\begin{frame}{Acknowledgments}
+  Core team (current): Valerie Obenchain, Herv\'e Pag\`es, Marcel
+  Ramos, Lori Shepherd, Nitesh Turaga, Daniel van Twisk.
+  \medskip\par
+  Technical advisory board: Vincent Carey, Kasper Hansen, Wolfgang
+  Huber, Robert Gentleman, Rafael Irizzary, Levi Waldron, Michael
+  Lawrence, Sean Davis, Aedin Culhane
+  \medskip\par Scientific advisory board: Robert Gentleman (23andMe),
+  Jan Vitek (Northeastern), Vincent Carey (Brigham \& Women's),
+  Wolfgang Huber (EBI), Rafael Irizzary (Dana Farber),
+  \medskip\par
+  Research reported in this presentation was supported by the National
+  Human Genome Research Institute and the National Cancer Institute of
+  the National Institutes of Health under award numbers U41HG004059
+  and U24CA180996. The content is solely the responsibility of the
+  authors and does not necessarily represent the official views of the
+  National Institutes of Health.
+\end{frame}
+
+\end{document}

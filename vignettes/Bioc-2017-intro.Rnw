@@ -94,6 +94,23 @@ suppressPackageStartupMessages({
   Tommorrow: 8:30 am, Jimmy Fund Auditorium
 \end{frame}
 
+\begin{frame}{Logistics}
+  Posters
+  \begin{itemize}
+  \item Please leave at the registration desk, today if possible,
+    Thursday morning at the latest.
+  \end{itemize}
+  Conference Amazon Machine Instances
+  \begin{itemize}
+  \item Start yours today at \url{courses.bioconductor.org}
+  \item Username: \ldots; password: \ldots
+  \item `This site can't be reached...' ?? Reload page (AMI is still
+    spinning up)
+  \item `We're sorry, but something went wrong' ?? Re-submit request
+    for AMI or notify Lori (Amazon ran out of cloud!)
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{\Bioconductor{} -- introduction}
   \begin{columns}
     \column{.5\textwidth}

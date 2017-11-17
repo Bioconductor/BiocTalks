@@ -40,7 +40,7 @@
   Roswell Park Cancer Institute\\
   Buffalo, NY, USA\\
   \href{mailto:martin.morgan@roswellpark.org}{martin.morgan@roswellpark.org}}
-\date{6 December 2016}
+\date{17 November, 2017}
 
 \begin{document}
 
@@ -60,12 +60,12 @@
   Analysis and comprehension of high-throughput genomic data.
   \begin{itemize}
   \item Started 2002
-  \item 1296 \R{} packages -- developed by `us' and user-contributed.
+  \item 14736 \R{} packages -- developed by `us' and user-contributed.
   \end{itemize}
   Well-used and respected.
   \begin{itemize}
-  \item 43k unique IP downloads / month.
-  \item 17,000 PubMedCentral citations.
+  \item 53k unique IP downloads / month.
+  \item 21,700 PubMedCentral citations.
   \end{itemize}
   \end{columns}
 \end{frame}
@@ -88,9 +88,7 @@
       \href{https://support.bioconductor.org}{https://support.bioconductor.org}
     }
     \only<4>{
-      \includegraphics[width=\textwidth]{build-report-overview.png}
-      \par
-      \includegraphics[width=\textwidth]{build-report-detail.png}
+      \includegraphics[width=\textwidth]{contributions.png}
     }
     \only<5>{
       \begin{center}
@@ -107,6 +105,7 @@
     \item Users
     \item Web \& support sites
     \item Training, workflows, \& meetings
+    \item New package submission
     \item Release \& devel builders
     \item Funding
     \item Governance: (annual) Scientific Advisory Board; (monthly)
@@ -117,194 +116,147 @@
 
 \section{Recent developments}
 
-\begin{frame}{Recent developments}
+\begin{frame}[fragile]{Recent developments}
   \begin{itemize}
-  \item New package submission
+  \item Git!
+\begin{semiverbatim}
+  git clone https://git.bioconductor.org/packages/limma
+  git clone git@git.bioconductor.org:packages/DESeq2
+\end{semiverbatim}
+  \item Large Single Cell
     \begin{itemize}
-    \item As github issues
-    \item Public; review participation welcome
+    \item \Biocpkg{SingleCellExperiment}
+    \item \Biocpkg{HDF5Array}
     \end{itemize}
-  \item \Biocpkg{ExperimentHub} and \Biocpkg{AnnotationHub}
-    \begin{itemize}
-    \item Similar to `Annotation' and `Experiment' data repositories
-    \item \Biocpkg{ExperimentHub} often used as the 'data store' for
-      experiment data packages, e.g., \Biocpkg{alpineData}.
-    \end{itemize}
-  \item Large data representation: \Biocpkg{HDF5Array}
-  \item (Sneak peak) \software{Organism.dplyr}
+  \item Lessons from 100's of package reviews
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{\Biocpkg{HDF5Array}}
+\begin{frame}[fragile]{Large single-cell data}
   \begin{semiverbatim}
-> library(HDF5Array)   # available in release & devel
-> library(h5vcData)
-> h5file <- system.file("extdata", "example.tally.hfs5",
-                        package="h5vcData")
-> cov0 <- HDF5Array(h5file, "/ExampleStudy/16/Coverages")
-> pcov <- t(drop(cov0[ , 1, ]))  # coverage on plus strand
-> mcov <- t(drop(cov0[ , 2, ]))  # coverage on minus strand
-
-> library(SummarizedExperiment)
-> SummarizedExperiment(list(pcov=pcov, mcov=mcov))
-class: SummarizedExperiment 
-dim: 90354753 6 
+> sce = TENxBrainData::TENxBrainData()
+snapshotDate(): 2017-10-30
+> sce
+class: SingleCellExperiment 
+dim: 27998 1306127 
 metadata(0):
-assays(2): pcov mcov
-...
+assays(1): counts
+rownames: NULL
+rowData names(2): Ensembl Symbol
+colnames(1306127): AAACCTGAGATAGGAG-1 AAACCTGAGCGGCTTC-1 ...
+  TTTGTCAGTTAAAGTG-133 TTTGTCATCTGAAAGA-133
+colData names(4): Barcode Sequence Library Mouse
+reducedDimNames(0):
+spikeNames(0):
   \end{semiverbatim}
 \end{frame}
 
-\begin{frame}[fragile]{Sneak peak: \software{Organism.dplyr}}
-  \begin{verbatim}
-> library(Organism.dplyr)
-    ## biocLite("Biocondctor/Organism.dplyr")
-> src = src_ucsc("Homo sapiens")  # any org.* + TxDb.*
-using org.Hs.eg.db, TxDb.Hsapiens.UCSC.hg38.knownGene
-> src
-src:  sqlite 3.8.6 [/home/mtmorgan/organism_dplyr.sqlite]
-tbls: id, id_accession, id_go, id_go_all, id_omim_pm,
-    id_protein, id_transcript, ranges_cds, ranges_exon,
-    ranges_gene, ranges_tx
-> ids <- tbl(src, "id") %>% 
-    filter(symbol %in% c("PTEN", "BRCA1"))
-> left_join(ids, tbl(src, "ranges_tx")) %>% GRanges
-> exons(src, filter=list(symobl='BRCA1'))      # GRanges
-> exons_tbl(src, filter=list(symbol='BRCA1'))  # tibble
-  \end{verbatim}
-\end{frame}
-
-\section{Programming best practices}
-
-\begin{frame}{Programming best practices}
+\begin{frame}{Large single-cell data}
   \begin{itemize}
-  \item Reuse \& interoperability
-    \begin{itemize}
-    \item \Biocpkg{GenomicRanges} and \Biocpkg{SummarizedExperiment}
-    \item \Biocpkg{rtracklayer}\Rcode{::import()} for BED, WIG, GTF,
-      GFF, etc.
-    \end{itemize}
-  \item Documentation: classic or \CRANpkg{roxygen2}
-  \item Testing: \CRANpkg{RUnit} or \CRANpkg{testthat}
-  \item Correct, robust, efficient (vectorized) code;
-    \Biocpkg{BiocParallel}
-  \item Classic, tidy, and semantically rich data
+  \item Chunk-wise iteration (often transparent to the user /
+    developer).
+  \item Marginal summaries in \Rcode{rowData}, \Rcode{colData}.
+  \item Supporting infrastructure: \Biocpkg{ExperimentHub},
+    \Biocpkg{rhdf5}, \Biocpkg{HDF5Array},
+    \Biocpkg{DelayedMatrixStats}, \Biocpkg{beachmat}.
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Correct, robust, efficient\ldots}
-  \begin{columns}[t]
-    \column{.5\textwidth}
-    \begin{verbatim}
-f = function(n) {
-  x = integer(0)
-  for (i in 1:n)
-      x = c(x, i)
-  x
-}
-microbenchmark(f(1000),
-  f(10000), f(100000))
+\section{Lessons learned}
 
-f1 = function(n) {
-  x = integer(n)
-  for (i in 1:n)
-    x[i] = i
-  x
-}
-    \end{verbatim}
-    \column{.5\textwidth}
-    \begin{verbatim}
-f2 = function(n)
-  vapply(1:n, c, integer(1))
-
-f3 = function(n)
-  seq_len(n)
-
-## correct
-identical(f(100), f3(100))
-
-## robust!
-f(0); f3(0)                 
-
-## efficient
-system.time(f3(1e9))
-    \end{verbatim}
+\begin{frame}[fragile]{Why use or contribute to \Bioconductor?}
+  \begin{columns}
+    \column{.35\textwidth} 
+    \begin{itemize}
+    \item Recognition.
+    \item Access \& Permanance.
+    \item Interoperability.
+    \item Documentation.
+    \item Support.
+    \item Tested.
+    \end{itemize}
+    \column{.65\textwidth}
+    \only<1>{
+      \includegraphics[width=.9\textwidth]{bioconductor_logo_rgb.pdf}
+    }
+    \only<2>{
+      \includegraphics[]{in_bioc.png}
+    }
+    \only<3>{
+\begin{semiverbatim}
+git\$ grep -l SummarizedExperiment \\\par
+\enskip\enskip */DESCRIPTION | wc -l\par
+165
+\end{semiverbatim}
+    }
+    \only<4>{
+      \includegraphics[width=.9\textwidth]{documentation.png}
+    }
+    \only<5>{
+      \includegraphics[width=.9\textwidth]{support.png}
+    }
+    \only<6>{
+      \includegraphics[width=.9\textwidth]{build.png}
+    }
   \end{columns}
 \end{frame}
 
-\begin{frame}{Classic, tidy, rich: RNA-seq count data}
-  Classic
-  \begin{itemize}
-  \item Sample x (phenotype + expression) Feature \Rcode{data.frame}
-  \end{itemize}
-  Tidy
-  \begin{itemize}
-  \item 'Melt' expression values to two long columns, replicated
-    phenotype columns. End result: long data frame.
-  \end{itemize}
-  Rich, e.g., \Rcode{SummarizedExperiment}
-  \begin{itemize}
-  \item Phenotype and expression data manipulated in a coordinated
-    fashion but stored separately.
-  \end{itemize}
+\begin{frame}[allowframebreaks]{Lessons learned from package reviews}
+  \begin{enumerate}
+  \item Interoperability
+    \begin{itemize}
+    \item Use feature $\times$ sample \Rcode{SummarizedExperiment}, not
+      sample $\times$ feature matrix
+    \item Use paradigms familiar to \Bioconductor{} users
+    \end{itemize}
+  \item Reuse
+    \begin{itemize}
+    \item Use \Rcode{rtracklayer::import.bed()}, not custom parser
+    \end{itemize}
+  \item Robust code
+    \begin{itemize}
+    \item Edge cases: \Rcode{seq\_len()} / \Rcode{seq\_along()}, not \Rcode{1:n}
+    \item Code complexity: \Rcode{vapply()}, not \Rcode{sapply()}
+    \end{itemize}
+  \item Performant code
+    \begin{itemize}
+    \item \emph{Vectorize} rather than \emph{iterate} (\Rcode{for},
+      \Rcode{lapply()}, \Rcode{apply()} are all iterative).
+    \item Reuse (e.g., \CRANpkg{matrixStats} before C / C++ implementation.
+    \end{itemize}
+    \framebreak
+  \item Tested code
+    \begin{itemize}
+    \item Essential: evaluated example and vignette code chunks.
+    \item Desireable: unit tests, e.g., \Biocpkg{testthat}.
+    \end{itemize}
+  \item Time and space limits.
+    \begin{itemize}
+    \item Excessive computation may represent inefficient code.
+    \item Challenging to identify rich but modest data for
+      illustration.
+    \item Experiment data packages, work flows, F1000 papers as venues
+      for more expensive / comprehensive reproducible analysis.
+    \end{itemize}
+  \item Ambition
+    \begin{itemize}
+    \item Implement essential features well
+    \item Avoid dependencies on packages for marginal value
+    \end{itemize}
+  \end{enumerate}
 \end{frame}
-
-\begin{frame}[fragile]{Classic, tidy, rich: RNA-seq count data}
-  \begin{semiverbatim}
-df0 <- as.data.frame(list(mean=colMeans(classic[, -(1:22)])))
-df1 <- tidy %>% group_by(probeset) %>% 
-    summarize(mean=mean(exprs))
-df2 <- as.data.frame(list(mean=rowMeans(assay(rich))))
-ggplot(df1, aes(mean)) + geom_density()
-  \end{semiverbatim}
-\end{frame}
-
-\begin{frame}{Classic, tidy, rich: RNA-seq count data}
-  \begin{columns}[t]
-    \column{.5\textwidth}
-    Vocabulary
-    \begin{itemize}
-    \item Classic: extensive
-    \item Tidy: restricted ‘endomorphisms’
-    \item Rich: extensive, ‘meaningful’
-    \end{itemize}
-    Constraints (e.g., probes \& samples)
-    \begin{itemize}
-    \item Tidy: implicit
-    \item Classic, Rich: explicit
-    \end{itemize}
-    Flexibility
-    \begin{itemize}
-    \item Classic, tidy: general-purpose
-    \item Rich: specialized
-    \end{itemize}
-
-    \column{.5\textwidth}
-    Programming contract
-    \begin{itemize}
-    \item   Classic, tidy: limited
-    \item Rich: strict
-    \end{itemize}
-    Lessons learned / best practices
-    \begin{itemize}
-    \item Considerable value in semantically rich structures
-    \item Current implementations trade-off user and developer
-      convenience
-    \item Endomorphism, simple vocabulary, consistent paradigm aid use
-    \end{itemize}
-  \end{columns}
-\end{frame}
-
 \section{Future challenges}
 
 \begin{frame}{Future challenges}
   \begin{itemize}
-  \item Git
+  \item Large data.
   \item Cloud. Possible visions:
     \begin{itemize}
-    \item As now, but `in the cloud'
+    \item As now, but `in the cloud' -- \url{https://rstudio.cloud}.
     \item Integrated with `third party' compute efforts, e.g., NCI,
-      NIH in the United States
+      NIH in the United States.
+    \item Pay-as-you-play -- use existing \Bioconductor{} AMIs or
+      docker containers.
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -312,17 +264,15 @@ ggplot(df1, aes(mean)) + geom_density()
 \section{Acknowledgments}
 
 \begin{frame}{Acknowledgments}
-  Core team: Yubo Cheng, Valerie Obenchain, Herv\'e Pag\`es, Marcel
-  Ramos, Lori Shepherd, Nitesh Turaga, Greg Wargula.
+  Core team: Qian Liu, Valerie Obenchain, Herv\'e Pag\`es, Marcel
+  Ramos, Lori Shepherd, Nitesh Turaga, Daniel van Twisk.
   \medskip\par
   Technical advisory board: Vincent Carey, Kasper Hansen, Wolfgang
   Huber, Robert Gentleman, Rafael Irizzary, Levi Waldron, Michael
   Lawrence, Sean Davis, Aedin Culhane
-  \medskip\par
-  Scientific advisory board: Simon Tavare (CRUK), Paul Flicek
-  (EMBL/EBI), Simon Urbanek (AT\&T), Vincent Carey (Brigham \&
-  Women's), Wolfgang Huber (EBI), Rafael Irizzary (Dana Farber),
-  Robert Gentleman (23andMe)
+  \medskip\par Scientific advisory board: Vincent Carey (Brigham \&
+  Women's), Wolfgang Huber (EBI), Rafael Irizzary (Dana Farber), Jan
+  Vitek (Northeastern University), Robert Gentleman (23andMe).
   \medskip\par
   Research reported in this presentation was supported by the National
   Human Genome Research Institute and the National Cancer Institute of

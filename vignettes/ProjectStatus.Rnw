@@ -40,7 +40,7 @@
   Roswell Park Cancer Institute\\
   Buffalo, NY, USA\\
   \href{mailto:martin.morgan@roswellpark.org}{martin.morgan@roswellpark.org}}
-\date{17 November, 2017}
+\date{5 December, 2017}
 
 \begin{document}
 
@@ -67,6 +67,7 @@
   \item 53k unique IP downloads / month.
   \item 21,700 PubMedCentral citations.
   \end{itemize}
+  More than 1000 maintainers!
   \end{columns}
 \end{frame}
 
@@ -76,7 +77,7 @@
   \begin{columns}
     \column{.5\textwidth}
     \only<1>{
-      \includegraphics[width=\textwidth]{packages-per-release.png}
+      \includegraphics[width=\textwidth]{packages-per-release.pdf}
     }
     \only<2>{
       \includegraphics[width=\textwidth]{web-visits.png}
@@ -116,51 +117,51 @@
 
 \section{Recent developments}
 
-\begin{frame}[fragile]{Recent developments}
-  \begin{itemize}
-  \item Git!
-\begin{semiverbatim}
-  git clone https://git.bioconductor.org/packages/limma
-  git clone git@git.bioconductor.org:packages/DESeq2
-\end{semiverbatim}
-  \item Large Single Cell
-    \begin{itemize}
-    \item \Biocpkg{SingleCellExperiment}
-    \item \Biocpkg{HDF5Array}
-    \end{itemize}
-  \item Lessons from 100's of package reviews
-  \end{itemize}
-\end{frame}
+%% \begin{frame}[fragile]{Recent developments}
+%%   \begin{itemize}
+%%   \item Git!
+%% \begin{semiverbatim}
+%%   git clone https://git.bioconductor.org/packages/limma
+%%   git clone git@git.bioconductor.org:packages/DESeq2
+%% \end{semiverbatim}
+%%   \item Large Single Cell
+%%     \begin{itemize}
+%%     \item \Biocpkg{SingleCellExperiment}
+%%     \item \Biocpkg{HDF5Array}
+%%     \end{itemize}
+%%   \item Lessons from 100's of package reviews
+%%   \end{itemize}
+%% \end{frame}
 
-\begin{frame}[fragile]{Large single-cell data}
-  \begin{semiverbatim}
-> sce = TENxBrainData::TENxBrainData()
-snapshotDate(): 2017-10-30
-> sce
-class: SingleCellExperiment 
-dim: 27998 1306127 
-metadata(0):
-assays(1): counts
-rownames: NULL
-rowData names(2): Ensembl Symbol
-colnames(1306127): AAACCTGAGATAGGAG-1 AAACCTGAGCGGCTTC-1 ...
-  TTTGTCAGTTAAAGTG-133 TTTGTCATCTGAAAGA-133
-colData names(4): Barcode Sequence Library Mouse
-reducedDimNames(0):
-spikeNames(0):
-  \end{semiverbatim}
-\end{frame}
+%% \begin{frame}[fragile]{Large single-cell data}
+%%   \begin{semiverbatim}
+%% > sce = TENxBrainData::TENxBrainData()
+%% snapshotDate(): 2017-10-30
+%% > sce
+%% class: SingleCellExperiment 
+%% dim: 27998 1306127 
+%% metadata(0):
+%% assays(1): counts
+%% rownames: NULL
+%% rowData names(2): Ensembl Symbol
+%% colnames(1306127): AAACCTGAGATAGGAG-1 AAACCTGAGCGGCTTC-1 ...
+%%   TTTGTCAGTTAAAGTG-133 TTTGTCATCTGAAAGA-133
+%% colData names(4): Barcode Sequence Library Mouse
+%% reducedDimNames(0):
+%% spikeNames(0):
+%%   \end{semiverbatim}
+%% \end{frame}
 
-\begin{frame}{Large single-cell data}
-  \begin{itemize}
-  \item Chunk-wise iteration (often transparent to the user /
-    developer).
-  \item Marginal summaries in \Rcode{rowData}, \Rcode{colData}.
-  \item Supporting infrastructure: \Biocpkg{ExperimentHub},
-    \Biocpkg{rhdf5}, \Biocpkg{HDF5Array},
-    \Biocpkg{DelayedMatrixStats}, \Biocpkg{beachmat}.
-  \end{itemize}
-\end{frame}
+%% \begin{frame}{Large single-cell data}
+%%   \begin{itemize}
+%%   \item Chunk-wise iteration (often transparent to the user /
+%%     developer).
+%%   \item Marginal summaries in \Rcode{rowData}, \Rcode{colData}.
+%%   \item Supporting infrastructure: \Biocpkg{ExperimentHub},
+%%     \Biocpkg{rhdf5}, \Biocpkg{HDF5Array},
+%%     \Biocpkg{DelayedMatrixStats}, \Biocpkg{beachmat}.
+%%   \end{itemize}
+%% \end{frame}
 
 \section{Lessons learned}
 
@@ -169,7 +170,7 @@ spikeNames(0):
     \column{.35\textwidth} 
     \begin{itemize}
     \item Recognition.
-    \item Access \& Permanance.
+    \item Access \& permanance.
     \item Interoperability.
     \item Documentation.
     \item Support.
@@ -201,28 +202,41 @@ git\$ grep -l SummarizedExperiment \\\par
   \end{columns}
 \end{frame}
 
+\begin{frame}{Our contributors}
+  \begin{columns}
+    \column{.5\textwidth}
+    \includegraphics[width=\textwidth]{packages-per-developer}
+    \column{.5\textwidth}
+    \begin{itemize}
+    \item 1060 unique maintainers.
+    \item 791 'first time' authors.
+    \end{itemize}
+  \end{columns}
+\end{frame}
+
 \begin{frame}[allowframebreaks]{Lessons learned from package reviews}
   \begin{enumerate}
   \item Interoperability
     \begin{itemize}
     \item Use feature $\times$ sample \Rcode{SummarizedExperiment}, not
-      sample $\times$ feature matrix
-    \item Use paradigms familiar to \Bioconductor{} users
+      sample $\times$ feature matrix.
+    \item Use paradigms familiar to \Bioconductor{} users.
     \end{itemize}
   \item Reuse
     \begin{itemize}
-    \item Use \Rcode{rtracklayer::import.bed()}, not custom parser
+    \item Use \Rcode{rtracklayer::import.bed()}, not custom parser.
     \end{itemize}
   \item Robust code
     \begin{itemize}
-    \item Edge cases: \Rcode{seq\_len()} / \Rcode{seq\_along()}, not \Rcode{1:n}
-    \item Code complexity: \Rcode{vapply()}, not \Rcode{sapply()}
+    \item Edge cases: \Rcode{seq\_len()} / \Rcode{seq\_along()}, not
+      \Rcode{1:n}.
+    \item Code complexity: \Rcode{vapply()}, not \Rcode{sapply()}.
     \end{itemize}
   \item Performant code
     \begin{itemize}
     \item \emph{Vectorize} rather than \emph{iterate} (\Rcode{for},
       \Rcode{lapply()}, \Rcode{apply()} are all iterative).
-    \item Reuse (e.g., \CRANpkg{matrixStats} before C / C++ implementation.
+    \item Reuse (e.g., \CRANpkg{matrixStats}) before C / C++ implementation.
     \end{itemize}
     \framebreak
   \item Tested code
@@ -240,11 +254,17 @@ git\$ grep -l SummarizedExperiment \\\par
     \end{itemize}
   \item Ambition
     \begin{itemize}
-    \item Implement essential features well
-    \item Avoid dependencies on packages for marginal value
+    \item Implement essential features well.
+    \item Avoid dependencies on packages for marginal value.
+    \end{itemize}
+  \item Pretty
+    \begin{itemize}
+    \item 'Poetry' with short lines, consistent and ample spacing,
+      standard formatting.
     \end{itemize}
   \end{enumerate}
 \end{frame}
+
 \section{Future challenges}
 
 \begin{frame}{Future challenges}

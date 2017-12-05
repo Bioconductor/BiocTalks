@@ -12,8 +12,8 @@ dcf <- dcf[rep(seq_along(m), lengths(m)),]
 
 m <- unlist(m)
 pattern <- "^(.*) <(.*)>"
-dcf$Name <- sub(pattern, "\\1", m)
-dcf$EMail <- sub(pattern, "\\2", m)
+dcf$Name <- trimws(sub(pattern, "\\1", m))
+dcf$EMail <- trimws(sub(pattern, "\\2", m))
 
 ## cannonical name
 idx <- match(tolower(dcf$Name), tolower(dcf$Name))

@@ -60,7 +60,7 @@
   Analysis and comprehension of high-throughput genomic data.
   \begin{itemize}
   \item Started 2002
-  \item 14736 \R{} packages -- developed by `us' and user-contributed.
+  \item 1473 \R{} packages -- developed by `us' and user-contributed.
   \end{itemize}
   Well-used and respected.
   \begin{itemize}
@@ -115,59 +115,11 @@
   \end{columns}
 \end{frame}
 
-\section{Recent developments}
-
-%% \begin{frame}[fragile]{Recent developments}
-%%   \begin{itemize}
-%%   \item Git!
-%% \begin{semiverbatim}
-%%   git clone https://git.bioconductor.org/packages/limma
-%%   git clone git@git.bioconductor.org:packages/DESeq2
-%% \end{semiverbatim}
-%%   \item Large Single Cell
-%%     \begin{itemize}
-%%     \item \Biocpkg{SingleCellExperiment}
-%%     \item \Biocpkg{HDF5Array}
-%%     \end{itemize}
-%%   \item Lessons from 100's of package reviews
-%%   \end{itemize}
-%% \end{frame}
-
-%% \begin{frame}[fragile]{Large single-cell data}
-%%   \begin{semiverbatim}
-%% > sce = TENxBrainData::TENxBrainData()
-%% snapshotDate(): 2017-10-30
-%% > sce
-%% class: SingleCellExperiment 
-%% dim: 27998 1306127 
-%% metadata(0):
-%% assays(1): counts
-%% rownames: NULL
-%% rowData names(2): Ensembl Symbol
-%% colnames(1306127): AAACCTGAGATAGGAG-1 AAACCTGAGCGGCTTC-1 ...
-%%   TTTGTCAGTTAAAGTG-133 TTTGTCATCTGAAAGA-133
-%% colData names(4): Barcode Sequence Library Mouse
-%% reducedDimNames(0):
-%% spikeNames(0):
-%%   \end{semiverbatim}
-%% \end{frame}
-
-%% \begin{frame}{Large single-cell data}
-%%   \begin{itemize}
-%%   \item Chunk-wise iteration (often transparent to the user /
-%%     developer).
-%%   \item Marginal summaries in \Rcode{rowData}, \Rcode{colData}.
-%%   \item Supporting infrastructure: \Biocpkg{ExperimentHub},
-%%     \Biocpkg{rhdf5}, \Biocpkg{HDF5Array},
-%%     \Biocpkg{DelayedMatrixStats}, \Biocpkg{beachmat}.
-%%   \end{itemize}
-%% \end{frame}
-
 \section{Lessons learned}
 
 \begin{frame}[fragile]{Why use or contribute to \Bioconductor?}
   \begin{columns}
-    \column{.35\textwidth} 
+    \column{.35\textwidth}
     \begin{itemize}
     \item Recognition.
     \item Access \& permanance.
@@ -265,19 +217,71 @@ git\$ grep -l SummarizedExperiment \\\par
   \end{enumerate}
 \end{frame}
 
-\section{Future challenges}
+\section{Recent directions}
 
-\begin{frame}{Future challenges}
+\begin{frame}[fragile]{Recent developments}
   \begin{itemize}
-  \item Large data.
-  \item Cloud. Possible visions:
+  \item Git!
+\begin{semiverbatim}
+  git clone https://git.bioconductor.org/packages/limma
+  git clone git@git.bioconductor.org:packages/DESeq2
+\end{semiverbatim}
+  \item Large Single Cell
     \begin{itemize}
-    \item As now, but `in the cloud' -- \url{https://rstudio.cloud}.
-    \item Integrated with `third party' compute efforts, e.g., NCI,
-      NIH in the United States.
-    \item Pay-as-you-play -- use existing \Bioconductor{} AMIs or
-      docker containers.
+    \item \Biocpkg{SingleCellExperiment}
+    \item \Biocpkg{HDF5Array}
     \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Large single-cell data}
+  \begin{semiverbatim}
+> sce = TENxBrainData::TENxBrainData()
+snapshotDate(): 2017-10-30
+> sce
+class: SingleCellExperiment
+dim: 27998 1306127
+metadata(0):
+assays(1): counts
+rownames: NULL
+rowData names(2): Ensembl Symbol
+colnames(1306127): AAACCTGAGATAGGAG-1 AAACCTGAGCGGCTTC-1 ...
+  TTTGTCAGTTAAAGTG-133 TTTGTCATCTGAAAGA-133
+colData names(4): Barcode Sequence Library Mouse
+reducedDimNames(0):
+spikeNames(0):
+  \end{semiverbatim}
+\end{frame}
+
+\begin{frame}{Large single-cell data}
+  \begin{itemize}
+  \item Chunk-wise iteration (often transparent to the user /
+    developer).
+  \item Marginal summaries in \Rcode{rowData}, \Rcode{colData}.
+  \item Supporting infrastructure: \Biocpkg{ExperimentHub},
+    \Biocpkg{rhdf5}, \Biocpkg{HDF5Array},
+    \Biocpkg{DelayedMatrixStats}, \Biocpkg{beachmat}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Cloud computing}
+  Possible visions
+  \begin{itemize}
+  \item As now, but `in the cloud' -- \url{https://rstudio.cloud}.
+  \item Exploit cloud services, e.g., BigQuery.
+  \item Pay-as-you-play -- use existing \Bioconductor{} AMIs or
+    docker containers.
+  \item Integrated with `third party' compute efforts, e.g., NCI,
+    NIH in the United States.
+  \item Federated data access.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Events}
+  \begin{itemize}
+  \item \emph{CSAMA} (training), Brixen / Bressanone, Italy, 8 - 13
+    July.
+  \item \emph{Bioc2018} Toronto, Canada, 25 - 27 July.
   \end{itemize}
 \end{frame}
 
